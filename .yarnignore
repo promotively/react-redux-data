@@ -1,0 +1,14 @@
+build/
+lib/
+coverage/
+test/
+node_modules/
+.DS_Store
+.babelrc
+.eslintrc
+.gitignore
+.yarnignore
+jest.config.js
+jsconfig.json
+webpack.config.js
+yarn-error.log
