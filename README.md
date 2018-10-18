@@ -297,3 +297,6 @@ export default compose(
   withData('users', fetchUsers)
 )(ListUsers)
 ```
+
+## License
+MIT
