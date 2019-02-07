@@ -1,6 +1,6 @@
 build/
-lib/
-coverage/
+example/
+src/
 test/
 node_modules/
 .DS_Store
@@ -9,6 +9,5 @@ node_modules/
 .gitignore
 .yarnignore
 jest.config.js
-jsconfig.json
 webpack.config.js
 yarn-error.log

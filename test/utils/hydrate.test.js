@@ -1,17 +1,28 @@
-import hydrateStore from '../lib/hydrate';
+/*
+ * @promotively/react-redux-data
+ *
+ * @copyright (c) 2018-2019, Promotively
+ * @author Steven Ewing <steven.ewing@promotively.com>
+ * @see {@link https://www.github.com/promotively/react-redux-data}
+ * @license MIT
+ */
+
+import hydrateStore from 'utils/hydrate';
 import React from 'react';
 
-describe('lib/hydrate.js', () => {
+const MockComponent = (props) => <div {...props} />;
+const mockError = new Error('error');
+
+describe('utils/hydrate.js', () => {
   it('should call componentWillDispatch on any child components.', async () => {
-    const mockComponentWillDispatch = jest.fn().mockImplementation(() =>
-      Promise.resolve()
-    );
+    const mockComponentWillDispatch = jest.fn(() => Promise.resolve());
 
     class Test extends React.Component {
 
       componentWillDispatch = mockComponentWillDispatch
+
       render() {
-        return ('test');
+        return <MockComponent />;
       }
 
     }
@@ -22,15 +33,16 @@ describe('lib/hydrate.js', () => {
   });
 
   it('should throw an error when there is an error thrown while parsing the JSX.', async () => {
-    const mockComponentWillDispatch = jest.fn().mockImplementation(() =>
-      Promise.reject(new Error('error'))
+    const mockComponentWillDispatch = jest.fn(() =>
+      Promise.reject(mockError)
     );
 
     class Test extends React.Component {
 
       componentWillDispatch = mockComponentWillDispatch
+
       render() {
-        return ('test');
+        return <MockComponent />;
       }
 
     }
@@ -38,7 +50,7 @@ describe('lib/hydrate.js', () => {
     try {
       expect(await hydrateStore(<Test />)).toThrow();
     } catch (error) {
-      expect(error).toEqual(new Error('error'));
+      expect(error).toEqual(mockError);
     }
   });
 });

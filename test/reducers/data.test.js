@@ -1,7 +1,25 @@
-import { DATA_FETCH_LOADING, DATA_FETCH_COMPLETE, DATA_FETCH_ERROR, DATA_FETCH_CLEAR } from '../lib/actions';
-import dataReducer from '../lib/reducer';
+/*
+ * @promotively/react-redux-data
+ *
+ * @copyright (c) 2018-2019, Promotively
+ * @author Steven Ewing <steven.ewing@promotively.com>
+ * @see {@link https://www.github.com/promotively/react-redux-data}
+ * @license MIT
+ */
 
-describe('lib/reducer.js', () => {
+import {
+  DATA_COMPLETE,
+  DATA_ERROR,
+  DATA_LOADING,
+  DATA_REMOVE
+} from 'actions/data';
+import dataReducer from 'reducers/data';
+
+const dataId = 'test';
+const mockData = { test: true };
+const mockError = new Error('test-error');
+
+describe('reducers/data.js', () => {
   const initialState = {};
   const previousState = {
     data: {
@@ -15,7 +33,7 @@ describe('lib/reducer.js', () => {
     expect(dataReducer(undefined, {})).toEqual(initialState);
   });
 
-  it('should handle DATA_FETCH_LOADING action type.', () => {
+  it('should handle DATA_LOADING action type.', () => {
     const nextState = {
       ...previousState,
       test: {
@@ -26,58 +44,58 @@ describe('lib/reducer.js', () => {
     };
 
     expect(dataReducer(previousState, {
-      key: 'test',
-      type: DATA_FETCH_LOADING
+      id: dataId,
+      type: DATA_LOADING
     })).toEqual(nextState);
   });
 
-  it('should handle DATA_FETCH_ERROR action type.', () => {
+  it('should handle DATA_ERROR action type.', () => {
     const nextState = {
       ...previousState,
       test: {
         data: null,
-        error: 'error',
+        error: mockError.message,
         loading: false
       }
     };
 
     expect(dataReducer(previousState, {
-      error: 'error',
-      key: 'test',
-      type: DATA_FETCH_ERROR
+      error: mockError.message,
+      id: dataId,
+      type: DATA_ERROR
     })).toEqual(nextState);
   });
 
-  it('should handle DATA_FETCH_COMPLETE action type.', () => {
+  it('should handle DATA_COMPLETE action type.', () => {
     const nextState = {
       ...previousState,
-      test: {
-        data: {},
+      [dataId]: {
+        data: mockData,
         error: null,
         loading: false
       }
     };
 
     expect(dataReducer(previousState, {
-      data: {},
-      key: 'test',
-      type: DATA_FETCH_COMPLETE
+      data: mockData,
+      id: dataId,
+      type: DATA_COMPLETE
     })).toEqual(nextState);
   });
 
-  it('should handle DATA_FETCH_CLEAR action type.', () => {
+  it('should handle DATA_REMOVE action type.', () => {
     const currentState = {
       ...previousState,
-      test: {
-        data: {},
+      [dataId]: {
+        data: mockData,
         error: null,
         loading: false
       }
     };
 
     expect(dataReducer(currentState, {
-      key: 'test',
-      type: DATA_FETCH_CLEAR
+      id: dataId,
+      type: DATA_REMOVE
     })).toEqual(previousState);
   });
 });

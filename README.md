@@ -1,302 +1,205 @@
-# react-redux-data
+# @promotively/react-redux-data
 
-```react-redux-data``` is a universal/isomporphic higher order (HOC) React component that manages your data dependencies through Redux.
+Universal react.js/redux.js library for data fetching.
 
-This package has three main goals.
+## Why?
 
-1) Keep your data logic with your components.
-2) Support for universal/isomorphic applications.
-3) Reduce the amount of repetitive redux code needed to fetch and reset data.
-
-This library will work with any react/redux based application (```react-router``` with ```react-router-config``` is not required!)
+* You are already using redux.js in your app.
+* You want an easy way to handle data fetching.
+* You are building a new app and want to use redux.js to handle your data state.
+* You have a bunch of repetitive data related react.js/redux.js boilerplate you wish didn't exist.
+* You want a proper data abstraction layer but don't have the time to build one.
+* You want to be able to debug your data through redux dev tools.
+* You need a library that is compatible with server side rendering.
+* You need to interact with APIs that are not HTTP and/or JSON based.
+* You want to refresh your data periodically through timers or events.
+* You need access to your component props when fetching data for things like access tokens or configs.
+* You need to share your data with external applications and/or tools.
 
 ## Installation
 
 With Yarn
 
-`yarn add react-redux-data`
+`yarn add @promotively/react-redux-data`
 
 With NPM
 
-`npm install react-redux-data`
+`npm install @promotively/react-redux-data`
 
-## Simple Usage
+## Example
 
-Add ```dataReducer``` to your redux store and make sure that ```redux-thunk``` is also installed.
+A working example is available inside the ```/example``` folder.
+
+Once you have performed ```yarn build``` go to the ```dist/example``` folder and from there you can run ```node server.js``` to see server side rendering from ```localhost:3000``` or open the ```index.html``` file to see client side rendering.
+
+## Setup
+
+Add ```dataReducer``` to your redux.js store and make sure that ```redux-thunk``` is also added to your store middleware.
 
 ```javascript
+// store.js
+
 import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { dataReducer } from '@promotively/react-redux-data';
 import thunk from 'redux-thunk';
-import { dataReducer } from 'react-redux-data';
 
 const store = createStore(
   combineReducers({ data: dataReducer }),
   applyMiddleware(...[ thunk ])
-)
-```
-
-Wrap your component using the ```withData``` higher order component and specify a key for your data and a function that returns a promise.
-
-```javascript
-import React from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { withData } from 'react-redux-data';
-
-const ListUsers = () => (
-  <h1>List Users</h1>
 );
 
-const fetchUsers = () => fetch('api/v1/users');
-
-export default compose(
-  connect(),
-  withData('users', fetchUsers)
-)(ListUsers);
+export default store;
 ```
 
-Use createDataSelector with ```react-redux``` mapStateToProps to inject data into your component
+## Basic Usage
+
+Wrap your component using ```withData``` and specify a unique identifier for your data and a function that returns a promise.
 
 ```javascript
-import React from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { createDataSelector, withData } from 'react-redux-data';
+// containers/users.js
 
-const mapStateToProps = (state, props) => {
-  const dataSelector = createDataSelector('users');
-
-  return {
-    users: dataSelector(state, props)
-  };
-}
-
-const ListUsers = (props) => (
-  <div>
-    <h1>List Users</h1>
-    <ul>
-      {props.users.map(user =>
-        <li>{user.name}</li>
-      )}
-    </ul>
-  </div>
-);
+import { withData } from '@promotively/react-redux-data';
+import axios from 'axios';
+import Users from '../components/users';
 
 const fetchUsers = () => (
-  fetch('/api/v1/users')
+  axios.get('http://localhost:3000/api/v1/users').then((response) => (
+    response.data
+  ))
 );
 
-export default compose(
-  connect(mapStateToProps),
-  withData('users', fetchUsers)
-)(ListUsers);
+const UsersContainer = withData('users', fetchUsers)(Users);
+
+export default UsersContainer;
 ```
 
-## Advanced Usage
+```javascript
+// components/users.js
 
-### Server Side Data Fetching (With Promises)
+import React from 'react';
 
-Use hydrateStore to ensure data is fetched before rendering your component.
+const Users = (props) => (
+  <ul>
+    {props.error ? <span>Error: {props.error}</span> : null}
+    {props.loading ? <span>Loading, Please Wait...</span> : null}
+    {props.users ? props.users.map((user) => (
+      <li key={user.id}>{user.name}</li>
+    )) : null}
+  </ul>
+);
+
+export default Users;
+```
+
+If you need to do server side rendering use ```hydrateStore``` to ensure data is fetched before your app is rendered.
 
 ```javascript
+// server.js
+
+import UsersContainer from './containers/users';
 import express from 'express';
-import React from 'react';
+import { hydrateStore } from '../src/index';
 import { Provider } from 'react-redux';
-import { hydrateStore } from 'react-redux-data';
-import createStore from './store';
-import ListUsers from './list-users';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import store from './store';
 
 const server = express();
-const store = createStore();
+
 const app = (
   <Provider store={store}>
-    <ListUsers />
+    <UsersContainer id="users" />
   </Provider>
 );
 
-app.get('/', async (req, res, error) => {
-  hydrateStore(jsx)
-    .then(() => {
-      res.send(renderToString(jsx))
-     })
-    .catch((e) => {
-      console.error(e)
-    });
-}
-
-server.listen(3000, () => console.log(`Example app listening on port 3000!`))
-```
-
-### Server Side Data Fetching (With Async/Await)
-
-Use hydrateStore to ensure data is fetched before rendering your component.
-
-```javascript
-import express from 'express';
-import React from 'react';
-import { Provider } from 'react-redux';
-import { hydrateStore } from 'react-redux-data';
-import createStore from './store';
-import ListUsers from './list-users';
-
-const server = express();
-const store = createStore();
-const app = (
-  <Provider store={store}>
-    <ListUsers />
-  </Provider>
-);
-
-app.get('/', async (req, res, error) => {
+server.get('/', async (req, res, next) => {
   try {
     await hydrateStore(app);
+
     res.send(renderToString(app));
   } catch (error) {
     next(error);
   }
-}
+});
 
-server.listen(3000, () => console.log(`Example app listening on port 3000!`))
+server.listen(3000);
 ```
 
-### Data Mapping
 
-Pass in a mapping function to the ```withData``` higher order component to change what gets saved into the redux store.
 
-```javascript
-import React from 'react';
-import { compose } from 'redux';
-import { connect as withRedux } from 'react-redux';
-import { createDataSelector, withData } from 'react-redux-data';
+## API
+### Redux Action Creators
 
-const mapStateToProps = (state, props) => {
-  const dataSelector = createDataSelector('users');
+| Function | Arguments | Description |
+| --- | --- | --- |
+| `errorWithData` | (id, error) | Set an error for data in the store. |
+| `clearData` | (id) | Clear data from the store. |
+| `fetchData` | (id, promise) | Resolve a promise and add the result to the store. |
 
-  return {
-    users: dataSelector(state, props)
-  };
-}
+### React Higher Order Component
 
-const mapUsers = (users) => (
-  users.filter((user) => user.age > 18)
-);
+| Function | Arguments | Description | Props
+| --- | --- | --- |
+| `withData` | (Component) | Higher order component that handles fetching and clearing data. | { clearData, data, error, errorWithData, fetchData, loading }
 
-const ListUsers = (props) => (
-  <div>
-    <h1>List Users</h1>
-    <ul>
-      {props.users.map(user =>
-        <li>{user.name}</li>
-      )}
-    </ul>
-  </div>
-);
+### Redux Reducers
 
-const fetchUsers = () => (
-  fetch('/api/v1/users')
-);
+| Function | Description |
+| --- | --- 
+| `dataReducer` | Redux reducer to handle the state mutations during the data fetching lifecycle. |
 
-export default compose(
-  withRedux(mapStateToProps),
-  withData('users', fetchUsers, mapUsers)
-)(ListUsers);
+### React Redux Selectors
+
+| Function | Arguments | Description |
+| --- | --- | --- |
+| `createDataSelector` | (id) | Get the current data. |
+| `createDataErrorSelector` | (id) | Get the error state. |
+| `createDataLoadingSelector` | (id) | Get the loading state. |
+
+### Utilities
+
+| Function | Arguments | Description |
+| --- | --- | --- |
+| `hydrateStore` | (app) | Resolve all promises outside of the react lifecycle (Mainly used for server side rendering). |
+
+## Build
+
+All build artifacts can be found inside the ```/dist/lib``` and ```/dist/example``` folders.
+
+```
+yarn build
 ```
 
-### Loading State
+## Tests
 
-Use createDataLoadingSelector with ```react-redux``` mapStateToProps to display a loading indicator
+This library has 100% unit test code coverage.
 
-```javascript
-import React from 'react';
-import { compose } from 'redux';
-import { connect as withRedux } from 'react-redux';
-import { createDataSelector, createDataLoadingSelector, withData } from 'react-redux-data';
+Code coverage is available inside the ```dist/coverage``` folder.
 
-const mapStateToProps = (state, props) => {
-  const dataSelector = createDataSelector('users');
-  const dataLoadingSelector = createDataLoadingSelector('users');
-
-  return {
-    users: dataSelector(state, props)
-    loading: dataLoadingSelector(state, props)
-  };
-}
-
-const ListUsers = (props) => (
-  <div>
-    <h1>List Users</h1>
-    {loading ?
-      <span>Loading, Please Wait...</span>
-    :
-      <ul>
-        {props.users.map(user =>
-          <li>{user.name}</li>
-        )}
-      </ul>
-    }
-  </div>
-);
-
-const fetchUsers = () => (
-  fetch('/api/v1/users')
-);
-
-export default compose(
-  withRedux(mapStateToProps),
-  withData('users', fetchUsers)
-)(ListUsers)
+```
+yarn test
 ```
 
-### Error State
+## Documentation
 
-Use createDataErrorSelector with ```react-redux``` mapStateToProps to display any errors
+The source code is documented using JSDoc syntax.
 
-```javascript
-import React from 'react';
-import { compose } from 'redux';
-import { connect as withRedux } from 'react-redux';
-import { createDataSelector, createDataLoadingSelector, createDataErrorSelector, withData } from 'react-redux-data';
+Documentation is generated using [esdoc](https://github.com/esdoc/esdoc) and is available inside the ```dist/docs``` folder.
 
-const mapStateToProps = (state, props) => {
-  const dataSelector = createDataSelector('users');
-  const dataLoadingSelector = createDataLoadingSelector('users');
-  const dataErrorSelector = createDataErrorSelector('users');
-
-  return {
-    users: dataSelector(state, props)
-    loading: dataLoadingSelector(state, props),
-    error: dataErrorSelector(state, props)
-  };
-}
-
-const ListUsers = (props) => (
-  <div>
-    <h1>List Users</h1>
-    {loading ?
-      <span>Loading, Please Wait...</span>
-    : null}
-    {error ?
-      <span>Error: {error}</span>
-    : null}
-    {!loading && !error ?
-      <ul>
-        {props.users.map(user =>
-          <li>{user.name}</li>
-        )}
-      </ul>
-    : null}
-  </div>
-);
-
-const fetchUsers = () => (
-  fetch('/api/v1/users')
-);
-
-export default compose(
-  withRedux(mapStateToProps),
-  withData('users', fetchUsers)
-)(ListUsers)
 ```
+yarn docs
+```
+
+## Linting
+
+This library uses [@promotively/eslint-config](https://www.github.com/promotively/eslint-config) and [@promotively/eslint-config-react](https://www.github.com/promotively/eslint-config-react) for its eslint configuration.
+
+```
+yarn lint
+```
+
+## Feedback
+Feedback is more than welcome via [GitHub](https://www.github.com/promotively) or [Twitter](https://www.twitter.com/promotively).
 
 ## License
 MIT
