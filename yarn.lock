@@ -1001,15 +1001,15 @@
     "@types/istanbul-lib-coverage" "^1.1.0"
     "@types/yargs" "^12.0.9"
 
-"@promotively/eslint-config-react@^1.0.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@promotively/eslint-config-react/-/eslint-config-react-1.1.0.tgz#d028d66a58fd196fb4d4b75af26af6c30b4c2baa"
-  integrity sha512-StO6gJSl+I4h56cqKH7d5k3W/88ozwoDo0oeu4Drux2v+/HeMOd1BuFahst4g9qfxYbMJsBu5h5u+LlvWNoLQw==
+"@promotively/eslint-config-react@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@promotively/eslint-config-react/-/eslint-config-react-1.1.2.tgz#d5dc80cca35414171b88de3df24ceffb82f0e5d4"
+  integrity sha512-eDCA6PkeKa0S0loITvKpAMmEkIQfaNUylPiIb91YAI4+qBysSwX+xCi3pQA9TMMygvGItsEdaSr8Ay/KPxStww==
 
-"@promotively/eslint-config@^1.0.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@promotively/eslint-config/-/eslint-config-1.1.0.tgz#3931eb83dc4ad27c212b6a60939ad29152dde587"
-  integrity sha512-5xcttu3OlATeHDgEhDXk3w9kj4d7tVOZ8RhimWHNU7FU3qJ4BhM6uIDDFRB4Vr/Li/I38wmq9VrbxL4RKecmbA==
+"@promotively/eslint-config@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@promotively/eslint-config/-/eslint-config-1.1.2.tgz#e778fb4a207c184034e3f1edc7c7f04f470eec0b"
+  integrity sha512-NiiOQuB2hANgyyGTqMbmkOkONsIFqf7fs3eWoqnklGqQfHz87OMcU/F+MYSrbIWmPJ+xEr/If/KMIpBoDaIDrg==
 
 "@promotively/react-tree-walker@promotively/react-tree-walker":
   version "4.3.0"
