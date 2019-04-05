@@ -10,6 +10,7 @@ Universal react.js/redux.js library for data fetching.
 * You have a bunch of repetitive data related react.js/redux.js boilerplate you wish didn't exist.
 * You want a proper data abstraction layer but don't have the time to build one.
 * You want to be able to debug your data through redux dev tools.
+* You want to avoid an architecture that depends on some kind of global data fetching layer (ie: react-router-config). 
 * You need a library that is compatible with server side rendering.
 * You need to interact with APIs that are not HTTP and/or JSON based.
 * You want to refresh your data periodically through timers or events.
@@ -91,11 +92,24 @@ const Users = (props) => (
 export default Users;
 ```
 
+```javascript
+// components/app.js
+
+import React from 'react';
+
+const App = (props) => (
+  <UsersContainer id="users" />
+);
+
+export default App;
+```
+
 If you need to do server side rendering use ```hydrateStore``` to ensure data is fetched before your app is rendered.
 
 ```javascript
 // server.js
 
+import App from './components/app';
 import UsersContainer from './containers/users';
 import express from 'express';
 import { hydrateStore } from '../src/index';
@@ -108,7 +122,7 @@ const server = express();
 
 const app = (
   <Provider store={store}>
-    <UsersContainer id="users" />
+    <App />
   </Provider>
 );
 
@@ -139,7 +153,7 @@ server.listen(3000);
 ### React Higher Order Component
 
 | Function | Arguments | Description | Props
-| --- | --- | --- |
+| --- | --- | --- | --- |
 | `withData` | (Component) | Higher order component that handles fetching and clearing data. | { clearData, data, error, errorWithData, fetchData, loading }
 
 ### Redux Reducers
