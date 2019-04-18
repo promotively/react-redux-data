@@ -8,8 +8,14 @@
  */
 
 import CopyPlugin from 'copy-webpack-plugin';
+import GenerateJSONPlugin from 'generate-json-webpack-plugin';
+import packageInfo from '../package.json';
 import path from 'path';
 import webpack from 'webpack';
+
+delete packageInfo.husky;
+delete packageInfo.scripts;
+delete packageInfo.devDependencies;
 
 const dependencies = [
   'react',
@@ -72,6 +78,11 @@ export default [{
       banner: copyright,
       entryOnly: true,
       raw: true
+    }),
+    new GenerateJSONPlugin('package.json', {
+      ...packageInfo,
+      browser: 'browser.js',
+      main: 'server.js'
     })
   ],
   resolve: {
