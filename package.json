@@ -72,6 +72,7 @@
     "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-module-resolver": "^3.2.0",
     "copy-webpack-plugin": "^5.0.1",
+    "coveralls": "^3.0.3",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",
     "esdoc": "^1.1.0",
