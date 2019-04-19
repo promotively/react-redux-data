@@ -1,3 +1,10 @@
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![NPM Version](https://badge.fury.io/js/%40promotively%2Freact-redux-data.svg)](https://badge.fury.io/js/%40promotively%2Freact-redux-data)
+[![Coverage Status](https://coveralls.io/repos/github/promotively/react-redux-data/badge.svg)](https://coveralls.io/github/promotively/react-redux-data)
+[![Build Status](https://codebuild.us-west-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiZGRPblJsbXA4WWVDY0gyU0VnM0JaVDVkaUFTeGpzYnNLUlFqRGRWd0J2MnBKOHA5cCtUY1plZHUvczkwNy96QUlsL3JUb1JiRnZmWVVzOTk1bG5wTE5nPSIsIml2UGFyYW1ldGVyU3BlYyI6Imw3VVN2QnhvTkN6UFZaNmYiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)](https://aws.amazon.com/codebuild)
+[![GitHub Issues](https://img.shields.io/github/issues/promotively/react-redux-data.svg)](https://github.com/promotively/react-redux-data/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/promotively/react-redux-data.svg)](https://GitHub.com/promotively/react-redux-data/pull/)
+
 # @promotively/react-redux-data
 
 Universal react.js/redux.js library for data fetching.
