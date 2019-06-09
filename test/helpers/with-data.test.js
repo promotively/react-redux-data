@@ -7,18 +7,17 @@
  * @license MIT
  */
 
-import { configure, shallow } from 'enzyme';
 import {
   DATA_LOADING,
   DATA_REMOVE
 } from 'actions/data';
-import Adapter from 'enzyme-adapter-react-16';
 import configureMockStore from 'redux-mock-store';
+import DataProvider from 'containers/data-provider';
+import { Provider } from 'react-redux';
 import React from 'react';
+import ReactTestRenderer from 'react-test-renderer';
 import thunk from 'redux-thunk';
 import withData from 'helpers/with-data';
-
-configure({ adapter: new Adapter() });
 
 const dataId = 'test-data';
 const mockData = { test: true };
@@ -27,19 +26,17 @@ const createMockStore = configureMockStore([ thunk ]);
 const createMockPromise = () => Promise.resolve(mockData);
 
 describe('helpers/with-data.js', () => {
-  it('should call componentWillDispatch method when there is no data.', () => {
+  it('should fetch data when the store is empty.', () => {
     const DataContainer = withData(dataId, createMockPromise)(MockComponent);
     const mockStore = createMockStore({
       data: {}
     });
 
-    const container = shallow(<DataContainer />, {
-      context: {
-        store: mockStore
-      }
-    });
-
-    container.dive();
+    ReactTestRenderer.create(
+      <Provider store={mockStore}>
+        <DataContainer />
+      </Provider>
+    );
 
     const actions = mockStore.getActions();
 
@@ -49,7 +46,7 @@ describe('helpers/with-data.js', () => {
     });
   });
 
-  it('should not call componentWillDispatch method when there is already data (ie: server side rendering).', () => {
+  it('should not fetch data when the store is not empty.', () => {
     const DataContainer = withData(dataId, createMockPromise)(MockComponent);
     const mockStore = createMockStore({
       data: {
@@ -61,13 +58,11 @@ describe('helpers/with-data.js', () => {
       }
     });
 
-    const container = shallow(<DataContainer />, {
-      context: {
-        store: mockStore
-      }
-    });
-
-    container.dive();
+    ReactTestRenderer.create(
+      <Provider store={mockStore}>
+        <DataContainer />
+      </Provider>
+    );
 
     const actions = mockStore.getActions();
 
@@ -86,13 +81,33 @@ describe('helpers/with-data.js', () => {
     };
     const DataContainer = withData(dataId, createMockPromise)(MockComponent);
     const mockStore = createMockStore(mockState);
-    const container = shallow(<DataContainer className={dataId} />, {
-      context: {
-        store: mockStore
-      }
-    });
+    const props = { test: true };
+    const renderer = ReactTestRenderer.create(
+      <Provider store={mockStore}>
+        <DataContainer test />
+      </Provider>
+    );
+    const container = renderer.root;
 
-    container.dive().find(MockComponent).exists(`.${dataId}`);
+    expect(container.findAllByProps(props)[0].props).toEqual(props);
+  });
+
+  it('should add the data promise into the data context if <DataProvider /> is an ancestor in the tree.', () => {
+    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
+    const mockStore = createMockStore({
+      data: {}
+    });
+    const dataContext = [];
+
+    ReactTestRenderer.create(
+      <Provider store={mockStore}>
+        <DataProvider context={dataContext}>
+          <DataContainer />
+        </DataProvider>
+      </Provider>
+    );
+
+    expect(dataContext[0].id).toEqual(dataId);
   });
 
   it('should remove fetched data when the container component unmounts.', () => {
@@ -107,13 +122,13 @@ describe('helpers/with-data.js', () => {
       }
     });
 
-    const container = shallow(<DataContainer />, {
-      context: {
-        store: mockStore
-      }
-    });
+    const renderer = ReactTestRenderer.create(
+      <Provider store={mockStore}>
+        <DataContainer />
+      </Provider>
+    );
 
-    container.dive().unmount();
+    renderer.unmount();
 
     const actions = mockStore.getActions();
 

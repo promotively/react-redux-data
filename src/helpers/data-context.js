@@ -7,14 +7,17 @@
  * @license MIT
  */
 
-import { Provider } from 'react-redux';
+/**
+ * @see {@link https://github.com/facebook/react}
+ */
+
 import React from 'react';
-import UsersContainer from './containers/users';
 
-const createReactApp = (store) => (
-  <Provider store={store}>
-    <UsersContainer />
-  </Provider>
-);
+/**
+ * The data context.
+ * @constant
+ * @type {Object}
+ */
+const DataContext = React.createContext();
 
-export default createReactApp;
+export default DataContext;

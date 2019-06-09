@@ -13,9 +13,11 @@ import {
   DATA_ERROR,
   DATA_LOADING,
   DATA_REMOVE,
-  clearData,
-  errorWithData,
-  fetchData
+  errorData,
+  completeData,
+  fetchData,
+  loadingData,
+  removeData
 } from 'actions/data';
 import createDataErrorSelector from 'selectors/data-error';
 import createDataLoadingSelector from 'selectors/data-loading';
@@ -30,14 +32,24 @@ describe('index.js', () => {
     expect(exports.fetchData).not.toBeFalsy();
   });
 
-  it('should export errorWithData action creator.', () => {
-    expect(exports.errorWithData).toEqual(errorWithData);
-    expect(exports.errorWithData).not.toBeFalsy();
+  it('should export loadingData action creator.', () => {
+    expect(exports.loadingData).toEqual(loadingData);
+    expect(exports.loadingData).not.toBeFalsy();
   });
 
-  it('should export clearData action creator.', () => {
-    expect(exports.clearData).toEqual(clearData);
-    expect(exports.clearData).not.toBeFalsy();
+  it('should export errorData action creator.', () => {
+    expect(exports.errorData).toEqual(errorData);
+    expect(exports.errorData).not.toBeFalsy();
+  });
+
+  it('should export completeData action creator.', () => {
+    expect(exports.completeData).toEqual(completeData);
+    expect(exports.completeData).not.toBeFalsy();
+  });
+
+  it('should export removeData action creator.', () => {
+    expect(exports.removeData).toEqual(removeData);
+    expect(exports.removeData).not.toBeFalsy();
   });
 
   it('should export DATA_LOADING action type.', () => {

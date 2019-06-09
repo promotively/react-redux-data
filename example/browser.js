@@ -7,12 +7,27 @@
  * @license MIT
  */
 
-import createReactApp from './app';
+import { hydrate, render } from 'react-dom';
+import App from './components/app';
 import createReduxStore from './store';
-import { hydrate } from 'react-dom';
+import { Provider } from 'react-redux';
+import React from 'react';
+
+// document.domain is never defined when opening files locally on the filesystem.
+const isSSR = document && document.domain;
 
 const state = window.REDUX_INITIAL_STATE;
 const store = createReduxStore(state);
-const app = createReactApp(store, state);
+const app = (
+  <Provider store={store}>
+    <App platform={isSSR ? 'server' : 'client'} />
+  </Provider>
+);
 
-hydrate(app, document.getElementsByTagName('main')[0]);
+const [ node ] = document.getElementsByTagName('main');
+
+if (isSSR) {
+  hydrate(app, node);
+} else {
+  render(app, node);
+}

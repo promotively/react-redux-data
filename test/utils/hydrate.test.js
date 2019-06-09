@@ -7,50 +7,87 @@
  * @license MIT
  */
 
+import configureMockStore from 'redux-mock-store';
+import { DATA_COMPLETE } from 'actions/data';
+import DataProvider from 'containers/data-provider';
 import hydrateStore from 'utils/hydrate';
+import { Provider } from 'react-redux';
 import React from 'react';
+import thunk from 'redux-thunk';
+import withData from 'helpers/with-data';
 
-const MockComponent = (props) => <div {...props} />;
-const mockError = new Error('error');
+const dataId = 'test-data';
+const mockData = { test: true };
+const MockComponent = (props) => props.children || 'test';
+const createMockStore = configureMockStore([ thunk ]);
+const mockError = new Error('test-error');
+const createMockPromise = () => Promise.resolve(mockData);
+const createMockPromiseWithError = () => Promise.reject(mockError);
 
 describe('utils/hydrate.js', () => {
-  it('should call componentWillDispatch on any child components.', async () => {
-    const mockComponentWillDispatch = jest.fn(() => Promise.resolve());
-
-    class Test extends React.Component {
-
-      componentWillDispatch = mockComponentWillDispatch
-
-      render() {
-        return <MockComponent />;
-      }
-
-    }
-
-    await hydrateStore(<Test />);
-
-    expect(mockComponentWillDispatch).toHaveBeenCalled();
-  });
-
-  it('should throw an error when there is an error thrown while parsing the JSX.', async () => {
-    const mockComponentWillDispatch = jest.fn(() =>
-      Promise.reject(mockError)
+  it('should handle saving data to the store when a promise is resolved.', async () => {
+    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
+    const mockStore = createMockStore({
+      data: {}
+    });
+    const data = [];
+    const app = (
+      <Provider store={mockStore}>
+        <DataProvider context={data}>
+          <DataContainer />
+        </DataProvider>
+      </Provider>
     );
 
-    class Test extends React.Component {
+    await hydrateStore(app, mockStore, data);
+    const actions = mockStore.getActions();
 
-      componentWillDispatch = mockComponentWillDispatch
+    expect(actions[1]).toEqual({
+      data: mockData,
+      id: dataId,
+      type: DATA_COMPLETE
+    });
+  });
 
-      render() {
-        return <MockComponent />;
-      }
+  it('should return the correct response when all promises are resolved.', async () => {
+    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
+    const mockStore = createMockStore({
+      data: {}
+    });
+    const data = [];
+    const app = (
+      <Provider store={mockStore}>
+        <DataProvider context={data}>
+          <DataContainer />
+        </DataProvider>
+      </Provider>
+    );
+    const result = await hydrateStore(app, mockStore, data);
 
-    }
+    expect(result).toEqual({ [dataId]: mockData });
+  });
 
+  it('should handle errors when fetching data if a promise is rejected.', async () => {
+    const DataContainer = withData(dataId, createMockPromiseWithError)(MockComponent);
+    const mockStore = createMockStore({
+      data: {}
+    });
+    const data = [];
+    const app = (
+      <Provider store={mockStore}>
+        <DataProvider context={data}>
+          <DataContainer />
+        </DataProvider>
+      </Provider>
+    );
+
+    let nextError = null;
     try {
-      expect(await hydrateStore(<Test />)).toThrow();
+      await hydrateStore(app, mockStore, data);
     } catch (error) {
-      expect(error).toEqual(mockError);
+      nextError = error;
     }
+
+    expect(nextError).toEqual(mockError);
   });
 });

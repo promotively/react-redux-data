@@ -7,14 +7,30 @@
  * @license MIT
  */
 
+/**
+ * @see {@link https://github.com/reduxjs/reselect}
+ */
+
 import { createSelector } from 'reselect';
 
 /**
- * Returns a selector function that returns the fetched data or undefined.
+ * Returns a reselect.js selector function to return the fetched data or undefined.
  * @function
- * @param {string} id The identifier for the data. If the same identifier is used across multiple components they will all share the same data.
- * @returns {function} reselect.js based selector
-*/
+ * @param {String} id The ID for the data.
+ * @returns {Function} A reselect.js selector function.
+ * @example
+ * ...
+ *
+ * import { createDataSelector } from '@promotively/react-redux-data';
+ *
+ * const mapStateToProps = (state) => {
+ *   const dataSelector = createDataSelector('billing');
+ *
+ *   return {
+ *     data: dataSelector(state)
+ *
+ * ...
+ */
 const createDataSelector = (id) => createSelector(
   (state) => (
     (state.data[id] && state.data[id].data) || undefined

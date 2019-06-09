@@ -26,6 +26,8 @@ Universal react.js/redux.js library for data fetching.
 
 ## Installation
 
+Requires **React 16.8.3 or later and Redux 7.0.0 or later.**
+
 With Yarn
 
 `yarn add @promotively/react-redux-data`
@@ -38,7 +40,21 @@ With NPM
 
 A working example is available inside the ```/example``` folder.
 
-Once you have performed ```yarn build``` go to the ```dist/example``` folder and from there you can run ```node server.js``` to see server side rendering from ```localhost:3000``` or open the ```index.html``` file to see client side rendering.
+Once you have executed ```yarn build``` go to the ```dist/example``` folder and from there you can run ```node server.js``` to see server side rendering from ```localhost:3000``` or open the ```index.html``` file to see client side rendering.
+
+An example is also [available online](https://promotively-react-redux-data.s3-us-west-1.amazonaws.com/example/index.html).
+
+## Documentation
+
+The source code is documented using JSDoc syntax and documentation is generated using [esdoc](https://github.com/esdoc/esdoc).
+
+Once you have executed ```yarn docs``` documentation is available inside the ```dist/docs``` folder.
+
+Documentation for the most recent release is also [available online](https://promotively-react-redux-data.s3-us-west-1.amazonaws.com/docs/index.html).
+
+## Feedback
+
+Feedback is more than welcome via [GitHub](https://www.github.com/promotively) or [Twitter](https://www.twitter.com/promotively).
 
 ## Setup
 
@@ -61,7 +77,7 @@ export default store;
 
 ## Basic Usage
 
-Wrap your component using ```withData``` and specify a unique identifier for your data and a function that returns a promise.
+Wrap your component using ```withData``` and specify an id for your data and a function that returns a promise.
 
 ```javascript
 // containers/users.js
@@ -70,7 +86,7 @@ import { withData } from '@promotively/react-redux-data';
 import axios from 'axios';
 import Users from '../components/users';
 
-const fetchUsers = () => (
+const fetchUsers = (props = {}) => (
   axios.get('http://localhost:3000/api/v1/users').then((response) => (
     response.data
   ))
@@ -105,13 +121,13 @@ export default Users;
 import React from 'react';
 
 const App = (props) => (
-  <UsersContainer id="users" />
+  <UsersContainer />
 );
 
 export default App;
 ```
 
-If you need to do server side rendering use ```hydrateStore``` to ensure data is fetched before your app is rendered.
+If you need to do server side rendering use ```hydrateStore``` with ```<DataProvider />``` to pre-fetch data before your app is rendered.
 
 ```javascript
 // server.js
@@ -119,24 +135,25 @@ If you need to do server side rendering use ```hydrateStore``` to ensure data is
 import App from './components/app';
 import UsersContainer from './containers/users';
 import express from 'express';
-import { hydrateStore } from '../src/index';
+import { hydrateStore } from '@promotively/react-redux-data';
 import { Provider } from 'react-redux';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import store from './store';
 
 const server = express();
-
+const data = [];
 const app = (
   <Provider store={store}>
-    <App />
+    <DataProvider context={data}>
+      <App />
+    </DataProvider>
   </Provider>
 );
 
 server.get('/', async (req, res, next) => {
   try {
-    await hydrateStore(app);
-
+    await hydrateStore(app, store, data);
     res.send(renderToString(app));
   } catch (error) {
     next(error);
@@ -146,70 +163,52 @@ server.get('/', async (req, res, next) => {
 server.listen(3000);
 ```
 
-
-
 ## API
 ### Redux Action Creators
 
 | Function | Arguments | Description |
 | --- | --- | --- |
-| `errorWithData` | (id, error) | Set an error for data in the store. |
-| `clearData` | (id) | Clear data from the store. |
+| `completeData` | (id, data) | Insert data into the store directly (good for caching!). |
+| `loadingData` | (id) | Set the data loading state. |
+| `errorData` | (id, error) | Set the data error state. |
+| `removeData` | (id) | Remove data from the store. |
 | `fetchData` | (id, promise) | Resolve a promise and add the result to the store. |
+
+### React Container Component
+
+| Function | Description | Props
+| --- | --- | --- |
+| `DataProvider` | Container component primarily used with the hydrateStore function for pre-fetching data with server side rendering. | { completeData, data, error, errorData, fetchData, loading, loadingData, removeData }
 
 ### React Higher Order Component
 
 | Function | Arguments | Description | Props
 | --- | --- | --- | --- |
-| `withData` | (Component) | Higher order component that handles fetching and clearing data. | { clearData, data, error, errorWithData, fetchData, loading }
+| `withData` | (Component) | Higher order component that handles fetching and clearing data. | { completeData, data, error, errorData, fetchData, loading, loadingData, removeData }
 
 ### Redux Reducers
 
 | Function | Description |
 | --- | --- 
-| `dataReducer` | Redux reducer to handle the state mutations during the data fetching lifecycle. |
+| `dataReducer` | A redux.js reducer function to handle the state mutations during the data fetching lifecycle. |
 
 ### React Redux Selectors
 
 | Function | Arguments | Description |
 | --- | --- | --- |
-| `createDataSelector` | (id) | Get the current data. |
-| `createDataErrorSelector` | (id) | Get the error state. |
-| `createDataLoadingSelector` | (id) | Get the loading state. |
+| `createDataSelector` | (id) | Create a reselect.js selector function to get the current data. |
+| `createDataErrorSelector` | (id) | Create a reselect.js selector function to get the error state. |
+| `createDataLoadingSelector` | (id) | Create a reselect.js selector function to get the loading state. |
 
 ### Utilities
 
 | Function | Arguments | Description |
 | --- | --- | --- |
-| `hydrateStore` | (app) | Resolve all promises outside of the react lifecycle (Mainly used for server side rendering). |
+| `hydrateStore` | (app, store, data) | A function that is used with the <DataProvider /> component for pre-fetching data with server side rendering. |
 
 ## Build
 
-All build artifacts can be found inside the ```/dist/lib``` and ```/dist/example``` folders.
-
-```
-yarn build
-```
-
-## Tests
-
-This library has 100% unit test code coverage.
-
-Code coverage is available inside the ```dist/coverage``` folder.
-
-```
-yarn test
-```
-
-## Documentation
-
-The source code is documented using JSDoc syntax.
-
-Documentation is generated using [esdoc](https://github.com/esdoc/esdoc) and is available inside the ```dist/docs``` folder.
-
-```
-yarn docs
-```
+All build artifacts can be found inside the ```dist/lib``` and ```dist/example``` folders after running ```yarn build```.
 
 ## Linting
 
@@ -219,8 +218,13 @@ This library uses [@promotively/eslint-config](https://www.github.com/promotivel
 yarn lint
 ```
 
-## Feedback
-Feedback is more than welcome via [GitHub](https://www.github.com/promotively) or [Twitter](https://www.twitter.com/promotively).
+## Tests
+
+This library has 100% unit test code coverage.
+
+Code coverage is available inside the ```dist/coverage``` folder after running ```yarn test```.
+
+Code coverage for the most recent release is also [available online](https://promotively-react-redux-data.s3-us-west-1.amazonaws.com/tests/index.html).
 
 ## License
 MIT

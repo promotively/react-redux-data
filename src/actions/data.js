@@ -7,84 +7,155 @@
  * @license MIT
  */
 
+/*
+ * @see {@link https://github.com/reduxjs/redux}
+ * @see {@link https://github.com/reduxjs/redux-thunk}
+ */
+
 /**
- * Value for the DATA_LOADING action type.
+ * Value for the DATA_LOADING redux.js action type.
  * @constant
- * @type {string}
+
+ * @type {String}
  */
 export const DATA_LOADING = '@@promotively/DATA_LOADING';
 
 /**
- * Value for the DATA_ERROR action type.
+ * Value for the DATA_ERROR redux.js action type.
  * @constant
- * @type {string}
+ * @type {String}
  */
 export const DATA_ERROR = '@@promotively/DATA_ERROR';
 
 /**
- * Value for the DATA_COMPLETE action type.
+ * Value for the DATA_COMPLETE redux.js action type.
  * @constant
- * @type {string}
+ * @type {String}
  */
 export const DATA_COMPLETE = '@@promotively/DATA_COMPLETE';
 
 /**
- * Value for the DATA_REMOVE action type.
+ * Value for the DATA_REMOVE redux.js action type.
  * @constant
- * @type {string}
+ * @type {String}
  */
 export const DATA_REMOVE = '@@promotively/DATA_REMOVE';
 
 /**
- * Creates an action that sets the error state on data.
+ * Creates a redux.js action that sets the error state on data.
  * @function
- * @param {string} id Unique identifier for the data.
- * @param {string} error The error to set on the data.
+ * @param {String} id The ID for the data.
+ * @param {Error} error The error to set on the data.
+ * @returns {Object} The redux.js action for the DATA_ERROR redux.js action type.
+ * @example
+ * ...
  *
- * @returns {object} Action for DATA_ERROR type.
+ * import { errorData } from '@promotively/react-redux-data';
+ *
+ * const handleContentExpiredError = (props) => (
+ *   props.dispatch(errorData('dashboard', new Error('Content is out of date, refresh to see new content.')))
+ * );
+ *
+ * ...
  */
-export const errorWithData = (id, error) => ({
-  error,
+export const errorData = (id, error) => ({
+  error: error.message,
   id,
   type: DATA_ERROR
 });
 
 /**
- * Creates an asynchronous action that fetches the data and saves it in the store.
+ * Creates a redux.js action that sets the loading state on data.
  * @function
- * @async
- * @param {string} id Identifier for the data. If the same identifier is used across multiple components they will all share the same data.
- * @param {function} promise Asychronous function that returns a promise to be resolved.
+ * @param {String} id The ID for the data.
+ * @returns {Object} The redux.js action for the DATA_LOADING redux.js action type.
+ * @example
+ * ...
  *
- * @returns {function} Asynchronous function that returns a promise that resolves the action.
+ * import { loadingData } from '@promotively/react-redux-data';
+ *
+ * const handleLoadingSpinner = (props) => (
+ *   props.dispatch(loadingData('dashboard'))
+ * );
+ *
+ * ...
+ */
+export const loadingData = (id) => ({
+  id,
+  type: DATA_LOADING
+});
+
+/**
+ * Creates a redux.js action that sets the complete state on data.
+ * @function
+ * @param {String} id The ID for the data.
+ * @param {Object|Array} data An array or object containing the data.
+ * @returns {Object} The redux.js action for the DATA_REMOVE redux.js action type.
+ * @example
+ * ...
+ *
+ * import { completeData } from '@promotively/react-redux-data';
+ *
+ * const handleCache = (id, data) => (
+ *   props.dispatch(completeData('dashboard', {
+ *     data: JSON.parse(localStorage.getItem("dashboard-cache"))
+ *   }))
+ * );
+ *
+ * ...
+ */
+export const completeData = (id, data) => ({
+  data,
+  id,
+  type: DATA_COMPLETE
+});
+
+/**
+ * Creates a redux.js thunk that fetches data.
+ * @function
+ * @param {String} id The ID for the data.
+ * @param {Function} promise Function that creates the promise to be resolved.
+ * @returns {Function} A function that returns a promise that dispatches redux.js actions for DATA_LOADING to DATA_ERROR and DATA_LOADING to DATA_COMPLETE during data fetching.
+ * @example
+ * ...
+ *
+ * import { fetchData } from '@promotively/react-redux-data';
+ *
+ * const fetchDashboardData = (props) => (
+ *   fetchData('dashboard', axios.get('http://localhost:3000/api/v1/dashboard'))(props.dispatch);
+ * );
+ *
+ * ...
  */
 export const fetchData = (id, promise) => (dispatch) => {
-  dispatch({
-    id,
-    type: DATA_LOADING
-  });
+  dispatch(loadingData(id));
 
   return promise().then((data) => (
-    dispatch({
-      data,
-      id,
-      type: DATA_COMPLETE
-    })
+    dispatch(completeData(id, data))
   )).catch((error) => {
-    dispatch(errorWithData(id, error.message));
+    dispatch(errorData(id, error));
 
     throw error;
   });
 };
 
 /**
- * Creates an action that clears data from the store.
+ * Creates a redux.js action that removes previously fetched data from the store.
  * @function
- * @param {string} id Unique identifier for the data.
+ * @param {String} id The ID for the data.
+ * @returns {Object} The redux.js action for the DATA_REMOVE redux.js action type.
+ * @example
+ * ...
  *
- * @returns {object} Action for DATA_REMOVE type.
+ * import { removeData } from '@promotively/react-redux-data';
+ *
+ * const resetDashboardData = (props) => (
+ *   props.dispatch(removeData('dashboard'))
+ * );
+ *
+ * ...
  */
-export const clearData = (id) => ({
+export const removeData = (id) => ({
   id,
   type: DATA_REMOVE
 });

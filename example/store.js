@@ -8,13 +8,19 @@
  */
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
-import { dataReducer } from '../src/index';
+import { formReducer, formInputReducer } from '@promotively/react-redux-form';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { dataReducer } from '../src';
 import thunk from 'redux-thunk';
 
 const createReduxStore = (initialState) => createStore(
-  combineReducers({ data: dataReducer }),
+  combineReducers({
+    data: dataReducer,
+    form: formReducer,
+    formInput: formInputReducer
+  }),
   initialState,
-  applyMiddleware(...[ thunk ])
+  composeWithDevTools(applyMiddleware(...[ thunk ]))
 );
 
 export default createReduxStore;

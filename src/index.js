@@ -12,10 +12,13 @@ export {
   DATA_ERROR,
   DATA_LOADING,
   DATA_REMOVE,
-  clearData,
-  errorWithData,
-  fetchData
+  errorData,
+  completeData,
+  fetchData,
+  loadingData,
+  removeData
 } from 'actions/data';
+export { default as DataProvider } from 'containers/data-provider';
 export { default as withData } from 'helpers/with-data';
 export { default as hydrateStore } from 'utils/hydrate';
 export { default as dataReducer } from 'reducers/data';

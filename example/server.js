@@ -7,51 +7,61 @@
  * @license MIT
  */
 
-import createReactApp from './app';
+import { DataProvider, hydrateStore } from '../src';
+import App from './components/app';
 import createReduxStore from './store';
 import express from 'express';
 import fs from 'fs';
-import { hydrateStore } from '../src/index';
+import React from 'react';
 import { renderToString } from 'react-dom/server';
+import { Provider as StoreProvider } from 'react-redux';
+import users from './data.json';
 
 const store = createReduxStore();
-const app = createReactApp(store);
+const data = [];
+const app = (
+  <StoreProvider store={store}>
+    <DataProvider context={data}>
+      <App platform="server" />
+    </DataProvider>
+  </StoreProvider>
+);
+
 const server = express();
-const bundle = fs.readFileSync(`${process.cwd()}/browser.js`).toString();
-const html = fs.readFileSync(`${process.cwd()}/index.html`).toString().replace('./browser.js', 'http://localhost:3000/browser.js').split('<main />');
-const header = `${html[0]}<main>`;
-const footer = `</main>${html[1]}`;
+const directory = process.cwd();
+const bundle = fs.readFileSync(`${directory}/browser.js`).toString();
+const html = fs.readFileSync(`${directory}/index.html`).toString().replace('./browser.js', 'http://localhost:3000/browser.js').split('<main />');
+const [ header, footer ] = html;
 
 server.get('/', (req, res) => {
-  hydrateStore(app)
+  hydrateStore(app, store, data)
     .then(() => {
       const jsx = renderToString(app);
       const state = `<script>window.REDUX_INITIAL_STATE = ${JSON.stringify(store.getState())};</script>`;
 
-      return res.send(`${header}${jsx}${state}${footer}`);
+      return res.send(`${header}<main>${jsx}</main>${state}${footer}`);
     }).catch((error) => {
       res.error('Internal Server Error');
       throw error;
     });
 });
 
+/*
+ * This api endpoint isn't used by default however you can enable it by using
+ * the axios example provided in the code comments inside: example/containers/users.js
+ */
 server.get('/api/v1/users', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
+  const { search } = req.query;
 
   res.json({
-    users: [{
-      age: 23,
-      id: 'bhd7s',
-      name: 'Jesse James'
-    }, {
-      age: 17,
-      id: 'ui4sm',
-      name: 'Joe Bradley'
-    }, {
-      age: 47,
-      id: '3ma9h',
-      name: 'John Smith'
-    }]
+    users: search ? users.filter(
+      (user) => user.name.toLowerCase().includes(search.toLowerCase())
+    ) : users.sort(
+      (previous, next) => (
+        previous.id - next.id
+      )
+    )
   });
 });
 

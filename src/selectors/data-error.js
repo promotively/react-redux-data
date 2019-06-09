@@ -7,14 +7,30 @@
  * @license MIT
  */
 
+/**
+ * @see {@link https://github.com/reduxjs/reselect}
+ */
+
 import { createSelector } from 'reselect';
 
 /**
- * Returns a selector function that returns the current error state for the data.
+ * Returns a reselect.js selector function to get the current data error state or return an empty string.
  * @function
- * @param {string} id The identifier for the data. If the same identifier is used across multiple components they will all share the same data.
- * @returns {function} reselect.js based selector
-*/
+ * @param {String} id The ID for the data.
+ * @returns {Function} A reselect.js selector function.
+ * @example
+ * ...
+ *
+ * import { createDataErrorSelector } from '@promotively/react-redux-data';
+ *
+ * const mapStateToProps = (state) => {
+ *   const dataErrorSelector = createDataErrorSelector('billing');
+ *
+ *   return {
+ *     error: dataErrorSelector(state)
+ *
+ * ...
+ */
 const createDataErrorSelector = (id) => createSelector(
   (state) => (
     (state.data[id] && state.data[id].error) || ''

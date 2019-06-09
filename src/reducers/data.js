@@ -7,6 +7,10 @@
  * @license MIT
  */
 
+/**
+ * @see {@link https://github.com/reduxjs/redux}
+ */
+
 import {
   DATA_LOADING,
   DATA_COMPLETE,
@@ -16,19 +20,18 @@ import {
 import clone from 'clone';
 
 /**
- * Initial state used for the first time the reducer function is called.
+ * Initial state used for the first time the redux.js reducer function is called.
  * @constant
- * @type {object}
+ * @type {Object}
  */
 const initialState = {};
 
 /**
- * Reducer function to handle the state mutations that happen during the data fetching lifecycle.
+ * The redux.js reducer function to handle any state mutations that are required during data fetching.
  * @function
- * @param {object} state The current state of the store.
- * @param {object} action The action that was dispatched.
- *
- * @returns {object} Deep clone of the existing state of the store with any mutations from the data fetching lifecycle.
+ * @param {Object} state The current state inside the redux.js store.
+ * @param {Object} action The last redux.js action that was dispatched.
+ * @returns {Object} Deep clone of the existing state of the store with any mutations related to data fetching.
 */
 const dataReducer = (state = initialState, action) => {
   const { id } = action;
