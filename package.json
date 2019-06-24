@@ -13,7 +13,7 @@
   },
   "homepage": "https://www.promotively.com",
   "license": "MIT",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "dist/lib/server.js",
   "browser": "dist/lib/browser.js",
   "scripts": {
