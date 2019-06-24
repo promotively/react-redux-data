@@ -13,7 +13,7 @@ import Header from '../components/header';
 import React from 'react';
 import UsersContainer from '../containers/users';
 
-const App = (props) => (
+const App = () => (
   <React.Fragment>
     <Header />
     <UsersContainer />
