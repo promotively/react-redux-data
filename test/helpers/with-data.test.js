@@ -7,11 +7,8 @@
  * @license MIT
  */
 
-import {
-  DATA_LOADING,
-  DATA_REMOVE
-} from 'actions/data';
 import configureMockStore from 'redux-mock-store';
+import { DATA_LOADING } from 'actions/data';
 import DataProvider from 'containers/data-provider';
 import { Provider } from 'react-redux';
 import React from 'react';
@@ -108,33 +105,5 @@ describe('helpers/with-data.js', () => {
     );
 
     expect(dataContext[0].id).toEqual(dataId);
-  });
-
-  it('should remove fetched data when the container component unmounts.', () => {
-    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
-    const mockStore = createMockStore({
-      data: {
-        [dataId]: {
-          data: [ mockData ],
-          error: null,
-          loading: false
-        }
-      }
-    });
-
-    const renderer = ReactTestRenderer.create(
-      <Provider store={mockStore}>
-        <DataContainer />
-      </Provider>
-    );
-
-    renderer.unmount();
-
-    const actions = mockStore.getActions();
-
-    expect(actions[0]).toEqual({
-      id: dataId,
-      type: DATA_REMOVE
-    });
   });
 });

@@ -19,8 +19,7 @@ import {
   completeData,
   errorData,
   fetchData,
-  loadingData,
-  removeData
+  loadingData
 } from 'actions/data';
 import createDataErrorSelector from 'selectors/data-error';
 import createDataLoadingSelector from 'selectors/data-loading';
@@ -38,8 +37,7 @@ const mapDispatchToProps = {
   completeData,
   errorData,
   fetchData,
-  loadingData,
-  removeData
+  loadingData
 };
 
 /**
@@ -95,7 +93,6 @@ const withData = (id, promise) => (Component) => {
      * @property {String} error The current data error state.
      * @property {String} id The ID for the data.
      * @property {Promise} promise A function that returns a promise containing the data.
-     * @property {Function} removeData Redux action to remove the data from the store.
      * @property {errorData} errorData Redux action to set an error for the data in the store.
      * @property {fetchData} fetchData Redux action to re-fetch the data and save it in the store.
      * @property {String} loading The current data loading state.
@@ -144,18 +141,6 @@ const withData = (id, promise) => (Component) => {
       if (Array.isArray(data) && !data.includes({ id, promise })) {
         data.push({ id, promise, props });
       }
-    }
-
-    /**
-     * Removes the data from the store when the component unmounts.
-     * @function
-     * @memberof WrappedComponent
-     * @returns {Undefined} Function does not return a value.
-     */
-    componentWillUnmount() {
-      const { removeData } = this.props;
-
-      removeData(id);
     }
 
     /**

@@ -14,10 +14,10 @@ import React from 'react';
 import UsersContainer from '../containers/users';
 
 const App = () => (
-  <React.Fragment>
+  <>
     <Header />
     <UsersContainer />
-  </React.Fragment>
+  </>
 );
 
 export default App;
