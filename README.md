@@ -226,5 +226,9 @@ Code coverage is available inside the ```dist/coverage``` folder after running `
 
 Code coverage for the most recent release is also [available online](https://promotively-react-redux-data.s3-us-west-1.amazonaws.com/tests/index.html).
 
+## Todo
+- [ ] Alternative API for using this library with React Hooks instead of using Higher Order Components.
+- [ ] Type definitions for TypeScript.
+
 ## License
 MIT
