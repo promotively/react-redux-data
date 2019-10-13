@@ -68,7 +68,7 @@ const withData = (id, promise) => (Component) => {
    * Maps the state from the redux.js store back to props that are passed down to the react.js component.
    * @function
    * @param {Object} state The current state of the redux.js store.
-   * @param {Object} props The properties available to the the parent react.js component.
+   * @param {Object} props The properties available to the parent react.js component.
    * @returns {Object} Mapped properties from the redux.js store.
    */
   const mapStateToProps = (state, props) => {
