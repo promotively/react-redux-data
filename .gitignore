@@ -1,5 +1,6 @@
 dist/
 node_modules/
-.eslintrc
 .yarnrc
+.npmrc
 yarn-error.log
+npm-error.log
