@@ -30,7 +30,6 @@ const createMockPromise = () => Promise.resolve(mockData);
 const createMockPromiseWithError = () => Promise.reject(mockError);
 
 describe('actions/data.js', () => {
-
   it('should handle fetching data using promises.', async () => {
     const mockStore = createMockStore();
 
