@@ -130,16 +130,16 @@ const withData = (id, promise) => (Component) => {
 
     /**
      * Updates the data context if there is a parent <DataProvider /> component (useful for server side rendering).
-     * @function
-     * @memberof WrappedComponent
-     * @returns {Undefined} Function does not return a value.
+     * @class
+     * @param {Object} props The properties available to the component.
+     * @param {Object} context The context available to the component.
      */
-    componentWillMount() {
-      const { context: data, props } = this;
+    constructor(props, context) {
+      super(props, context);
 
       // Only push to the data context if it exists, is an array and is not already added to the data context.
-      if (Array.isArray(data) && !data.includes({ id, promise })) {
-        data.push({ id, promise, props });
+      if (Array.isArray(context) && !context.includes({ id, promise })) {
+        context.push({ id, promise, props });
       }
     }
 
