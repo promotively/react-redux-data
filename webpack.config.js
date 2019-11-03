@@ -188,6 +188,9 @@ module.exports = [{
       test: /src\/(.*)\.js$/
     }]
   },
+  optimization: {
+    nodeEnv: false
+  },
   output: {
     filename: '[name].js',
     library: '@promotively/react-redux-data',
