@@ -10,14 +10,19 @@
 /* eslint-disable react/prop-types */
 
 import Header from '../components/header';
+import PropTypes from 'prop-types';
 import React from 'react';
 import UsersContainer from '../containers/users';
 
-const App = () => (
+const App = (props) => (
   <>
-    <Header />
+    <Header platform={props.platform} />
     <UsersContainer />
   </>
 );
+
+App.propTypes = {
+  platform: PropTypes.string.isRequired
+};
 
 export default App;
