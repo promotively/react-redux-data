@@ -3,7 +3,7 @@
  *
  * @copyright (c) 2018-2019, Promotively
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://www.github.com/promotively/react-redux-data}
+ * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
  */
 
@@ -52,7 +52,7 @@ const Users = (props) => (
           top: 0
         }}
       >
-        <Alert>The form functionality is implemented using <a href="https://www.github.com/promotively/react-redux-form">@promotively/react-redux-form</a>.</Alert>
+        <Alert>The form functionality is implemented using <a href="https://github.com/promotively/react-redux-form">@promotively/react-redux-form</a>.</Alert>
       </div>
     </div>
     {props.data && props.data.length ? (

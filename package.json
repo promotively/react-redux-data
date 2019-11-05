@@ -6,12 +6,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://www.github.com/promotively/react-redux-data"
+    "url": "https://github.com/promotively/react-redux-data"
   },
   "bugs": {
     "url": "https://github.com/promotively/react-redux-data/issues"
   },
-  "homepage": "https://www.promotively.com",
+  "homepage": "https://promotively.com",
   "license": "MIT",
   "version": "2.2.0",
   "main": "dist/lib/server.js",
