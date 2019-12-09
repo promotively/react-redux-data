@@ -18,8 +18,8 @@ import withData from 'helpers/with-data';
 
 const dataId = 'test-data';
 const mockData = { test: true };
-const MockComponent = (props) => props.children || 'test';
-const createMockStore = configureMockStore([ thunk ]);
+const MockComponent = props => props.children || 'test';
+const createMockStore = configureMockStore([thunk]);
 const mockError = new Error('test-error');
 const createMockPromise = () => Promise.resolve(mockData);
 const createMockPromiseWithError = () => Promise.reject(mockError);

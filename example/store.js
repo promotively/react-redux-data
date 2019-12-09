@@ -13,14 +13,15 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { dataReducer } from '../src';
 import thunk from 'redux-thunk';
 
-const createReduxStore = (initialState) => createStore(
-  combineReducers({
-    data: dataReducer,
-    form: formReducer,
-    formInput: formInputReducer
-  }),
-  initialState,
-  composeWithDevTools(applyMiddleware(...[ thunk ]))
-);
+const createReduxStore = initialState =>
+  createStore(
+    combineReducers({
+      data: dataReducer,
+      form: formReducer,
+      formInput: formInputReducer
+    }),
+    initialState,
+    composeWithDevTools(applyMiddleware(...[thunk]))
+  );
 
 export default createReduxStore;

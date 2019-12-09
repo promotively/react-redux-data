@@ -24,7 +24,7 @@ const app = (
   </Provider>
 );
 
-const [ node ] = document.getElementsByTagName('main');
+const [node] = document.getElementsByTagName('main');
 
 if (isSSR) {
   hydrate(app, node);

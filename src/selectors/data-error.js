@@ -31,13 +31,10 @@ import { createSelector } from 'reselect';
  *
  * ...
  */
-const createDataErrorSelector = (id) => createSelector(
-  (state) => (
-    (state.data[id] && state.data[id].error) || ''
-  ),
-  (error) => (
-    error
-  )
-);
+const createDataErrorSelector = id =>
+  createSelector(
+    state => (state.data[id] && state.data[id].error) || '',
+    error => error
+  );
 
 export default createDataErrorSelector;

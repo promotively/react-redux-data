@@ -15,12 +15,7 @@
 
 /* eslint-disable react/prop-types */
 
-import {
-  completeData,
-  errorData,
-  fetchData,
-  loadingData
-} from 'actions/data';
+import { completeData, errorData, fetchData, loadingData } from 'actions/data';
 import createDataErrorSelector from 'selectors/data-error';
 import createDataLoadingSelector from 'selectors/data-loading';
 import createDataSelector from 'selectors/data';
@@ -62,8 +57,7 @@ const mapDispatchToProps = {
  *
  * ...
  */
-const withData = (id, promise) => (Component) => {
-
+const withData = (id, promise) => Component => {
   /**
    * Maps the state from the redux.js store back to props that are passed down to the react.js component.
    * @function
@@ -85,7 +79,6 @@ const withData = (id, promise) => (Component) => {
   };
 
   class WrappedComponent extends React.PureComponent {
-
     /**
      * @typedef WrappedComponentProps
      * @type {Object}
@@ -96,7 +89,7 @@ const withData = (id, promise) => (Component) => {
      * @property {errorData} errorData Redux action to set an error for the data in the store.
      * @property {fetchData} fetchData Redux action to re-fetch the data and save it in the store.
      * @property {String} loading The current data loading state.
-    */
+     */
 
     /**
      * Returns only the component properties that need to be passed to the child component.
@@ -150,11 +143,8 @@ const withData = (id, promise) => (Component) => {
      * @returns {Object} React JSX to render the child component.
      */
     render() {
-      return (
-        <Component {...this.getComponentProps()} />
-      );
+      return <Component {...this.getComponentProps()} />;
     }
-
   }
 
   WrappedComponent.displayName = 'WithData(WrappedComponent)';

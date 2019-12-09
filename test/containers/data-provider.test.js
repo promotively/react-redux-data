@@ -16,7 +16,7 @@ import ReactTestRenderer from 'react-test-renderer';
 import thunk from 'redux-thunk';
 
 const mockData = [{ id: 'test' }];
-const createMockStore = configureMockStore([ thunk ]);
+const createMockStore = configureMockStore([thunk]);
 
 describe('containers/data-provider.js', () => {
   it('should pass the data context down to any withData higher order components or data context consumers.', () => {
@@ -27,12 +27,9 @@ describe('containers/data-provider.js', () => {
     ReactTestRenderer.create(
       <Provider store={mockStore}>
         <DataProvider context={mockData}>
-          <DataContext.Consumer>
-            {(context) => (expect(context).toEqual(mockData))}
-          </DataContext.Consumer>
+          <DataContext.Consumer>{context => expect(context).toEqual(mockData)}</DataContext.Consumer>
         </DataProvider>
       </Provider>
     );
   });
-
 });

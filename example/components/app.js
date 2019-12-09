@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import UsersContainer from '../containers/users';
 
-const App = (props) => (
+const App = props => (
   <>
     <Header platform={props.platform} />
     <UsersContainer />

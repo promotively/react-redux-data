@@ -80,7 +80,7 @@ export const errorData = (id, error) => ({
  *
  * ...
  */
-export const loadingData = (id) => ({
+export const loadingData = id => ({
   id,
   type: DATA_LOADING
 });
@@ -115,28 +115,30 @@ export const completeData = (id, data) => ({
  * @function
  * @param {String} id The ID for the data.
  * @param {Function} promise Function that creates the promise to be resolved.
- * @returns {Function} A function that returns a promise that dispatches redux.js actions for DATA_LOADING to DATA_ERROR and DATA_LOADING to DATA_COMPLETE during data fetching.
+ * @returns {Function} A function that returns a promise that dispatches
+ * redux.js actions for DATA_LOADING to DATA_ERROR and DATA_LOADING to
+ * DATA_COMPLETE during data fetching.
  * @example
  * ...
  *
  * import { fetchData } from '@promotively/react-redux-data';
  *
  * const fetchDashboardData = (props) => (
- *   fetchData('dashboard', axios.get('http://localhost:3000/api/v1/dashboard'))(props.dispatch);
- * );
+ *   fetchData('dashboard', axios.get('http://localhost:3000/api/v1/dashboard')
+ * )(props.dispatch));
  *
  * ...
  */
-export const fetchData = (id, promise) => (dispatch) => {
+export const fetchData = (id, promise) => dispatch => {
   dispatch(loadingData(id));
 
-  return promise().then((data) => (
-    dispatch(completeData(id, data))
-  )).catch((error) => {
-    dispatch(errorData(id, error));
+  return promise()
+    .then(data => dispatch(completeData(id, data)))
+    .catch(error => {
+      dispatch(errorData(id, error));
 
-    throw error;
-  });
+      throw error;
+    });
 };
 
 /**
@@ -155,7 +157,7 @@ export const fetchData = (id, promise) => (dispatch) => {
  *
  * ...
  */
-export const removeData = (id) => ({
+export const removeData = id => ({
   id,
   type: DATA_REMOVE
 });

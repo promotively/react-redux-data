@@ -25,7 +25,7 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const fetchUsers = (props) => {
+const fetchUsers = props => {
   const { keywords } = props;
 
   /*
@@ -41,27 +41,24 @@ const fetchUsers = (props) => {
    *     response.data.users
    *   ));
    */
-  return new Promise((resolve) => (
+  return new Promise(resolve =>
     // Use setTimeout and Math.random to simulate server loading and latency times.
-    setTimeout(() => (
-      resolve(
-        // Use Array.filter and String.includes to simulate server side keyword search.
-        keywords ? users.filter(
-          (user) => user.name.toLowerCase().includes(keywords.toLowerCase())
-        ) : users.sort(
-          // Use Array.sort to simulate server side data sorting
-          (previous, next) => (
-            previous.id - next.id
-          )
-        )
-      )
-    ), Math.floor(Math.random() * 300) + 100)
-  ));
+    setTimeout(
+      () =>
+        resolve(
+          // Use Array.filter and String.includes to simulate server side keyword search.
+          keywords
+            ? users.filter(user => user.name.toLowerCase().includes(keywords.toLowerCase()))
+            : users.sort(
+                // Use Array.sort to simulate server side data sorting
+                (previous, next) => previous.id - next.id
+              )
+        ),
+      Math.floor(Math.random() * 300) + 100
+    )
+  );
 };
 
-const UsersContainer = compose(
-  withRedux(mapStateToProps),
-  withData('users', fetchUsers)
-)(Users);
+const UsersContainer = compose(withRedux(mapStateToProps), withData('users', fetchUsers))(Users);
 
 export default UsersContainer;

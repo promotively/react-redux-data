@@ -31,13 +31,10 @@ import { createSelector } from 'reselect';
  *
  * ...
  */
-const createDataLoadingSelector = (id) => createSelector(
-  (state) => (
-    Boolean(state.data[id] && state.data[id].loading)
-  ),
-  (loading) => (
-    loading
-  )
-);
+const createDataLoadingSelector = id =>
+  createSelector(
+    state => Boolean(state.data[id] && state.data[id].loading),
+    loading => loading
+  );
 
 export default createDataLoadingSelector;

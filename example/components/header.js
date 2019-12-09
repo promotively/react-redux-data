@@ -15,7 +15,7 @@ import GitHubLink from './github-link';
 import React from 'react';
 import WebLink from './web-link';
 
-const Header = (props) => (
+const Header = props => (
   <div style={{ position: 'relative' }}>
     <WebLink />
     <GitHubLink project="react-redux-data" />
@@ -32,10 +32,21 @@ const Header = (props) => (
         Tip: React Developer Tools, Redux Dev Tools and Source Maps are all enabled in this example.
       </Alert>
     </div>
-    <p>This is an example of a universal react.js/redux.js/node.js web application using the <a href="https://github.com/promotively/react-redux-data">@promotively/react-redux-data</a> library to fetch a list of users and render the result in the browser and/or server.</p>
-    <p><a href="https://promotively-react-redux-data.s3-us-west-1.amazonaws.com/docs/index.html">Read the documentation</a> for more details including a simple step by step guide.</p>
+    <p>
+      This is an example of a universal react.js/redux.js/node.js web application using the{' '}
+      <a href="https://github.com/promotively/react-redux-data">@promotively/react-redux-data</a> library to fetch a
+      list of users and render the result in the browser and/or server.
+    </p>
+    <p>
+      <a href="https://promotively-react-redux-data.s3-us-west-1.amazonaws.com/docs/index.html">
+        Read the documentation
+      </a>{' '}
+      for more details including a simple step by step guide.
+    </p>
     <div style={{ marginBottom: '10px' }}>
-      <Alert type="info">Note: This page was initially rendered {props.platform === 'server' ? 'with node.js' : 'in the browser'}.</Alert>
+      <Alert type="info">
+        Note: This page was initially rendered {props.platform === 'server' ? 'with node.js' : 'in the browser'}.
+      </Alert>
     </div>
   </div>
 );

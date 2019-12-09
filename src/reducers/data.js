@@ -11,12 +11,7 @@
  * @see {@link https://github.com/reduxjs/redux}
  */
 
-import {
-  DATA_LOADING,
-  DATA_COMPLETE,
-  DATA_ERROR,
-  DATA_REMOVE
-} from 'actions/data';
+import { DATA_LOADING, DATA_COMPLETE, DATA_ERROR, DATA_REMOVE } from 'actions/data';
 import clone from 'clone';
 
 /**
@@ -32,7 +27,7 @@ const initialState = {};
  * @param {Object} state The current state inside the redux.js store.
  * @param {Object} action The last redux.js action that was dispatched.
  * @returns {Object} Deep clone of the existing state of the store with any mutations related to data fetching.
-*/
+ */
 const dataReducer = (state = initialState, action) => {
   const { id } = action;
 

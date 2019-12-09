@@ -20,12 +20,8 @@
     "build": "webpack",
     "docs": "esdoc -c esdoc.config.js",
     "lint": "eslint -c eslint.config.js *.config.js src/**/*.js test/**/*.js example/**/*.js",
-    "test": "jest"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "export PATH=\"./node_modules/.bin:$PATH\" yarn lint && yarn test"
-    }
+    "test": "jest",
+    "pretty": "prettier --write \"**/*.js\""
   },
   "description": "Universal react.js/redux.js library for data fetching.",
   "keywords": [
@@ -63,8 +59,9 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
-    "@promotively/eslint-config": "^1.1.5",
-    "@promotively/eslint-config-react": "^1.1.4",
+    "@promotively/eslint-config": "^2.0.0",
+    "@promotively/eslint-config-react": "^1.2.0",
+    "@promotively/prettier-config": "^1.0.0",
     "@promotively/react-redux-form": "^2.0.1",
     "axios": "^0.19.0",
     "babel-core": "^7.0.0-bridge.0",
@@ -87,10 +84,13 @@
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-react": "^7.14.1",
+    "eslint-plugin-react-hooks": "^2.3.0",
     "express": "^4.17.1",
     "generate-json-webpack-plugin": "^0.3.1",
     "husky": "^3.0.9",
     "jest": "^24.8.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-redux": "^7.1.1",

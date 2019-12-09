@@ -11,7 +11,7 @@
 
 import React from 'react';
 
-export const Table = (props) => (
+export const Table = props => (
   <table
     cellPadding={0}
     cellSpacing={0}
@@ -24,11 +24,9 @@ export const Table = (props) => (
   />
 );
 
-export const TableHeader = (props) => (
-  <thead {...props} />
-);
+export const TableHeader = props => <thead {...props} />;
 
-export const TableHeaderCell = (props) => (
+export const TableHeaderCell = props => (
   <th
     style={{
       background: '#000',
@@ -41,15 +39,11 @@ export const TableHeaderCell = (props) => (
   />
 );
 
-export const TableBody = (props) => (
-  <tbody {...props} />
-);
+export const TableBody = props => <tbody {...props} />;
 
-export const TableRow = (props) => (
-  <tr {...props} />
-);
+export const TableRow = props => <tr {...props} />;
 
-export const TableBodyRowCell = (props) => (
+export const TableBodyRowCell = props => (
   <td
     style={{
       borderBottom: '1px solid #000',

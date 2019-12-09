@@ -11,7 +11,7 @@
 
 import React from 'react';
 
-const Wrapper = (props) => (
+const Wrapper = props => (
   <div
     style={{
       border: '1px solid #000',

@@ -9,20 +9,13 @@
 
 /* eslint-disable react/prop-types */
 
-import {
-  Table,
-  TableHeader,
-  TableHeaderCell,
-  TableBody,
-  TableRow,
-  TableBodyRowCell
-} from './table';
+import { Table, TableHeader, TableHeaderCell, TableBody, TableRow, TableBodyRowCell } from './table';
 import Alert from './alert';
 import React from 'react';
 import SearchFormContainer from '../containers/search-form';
 import Wrapper from './wrapper';
 
-const Users = (props) => (
+const Users = props => (
   <Wrapper>
     <div style={{ display: 'flex', position: 'relative' }}>
       <SearchFormContainer
@@ -35,14 +28,10 @@ const Users = (props) => (
       <div style={{ marginLeft: '5px' }}>
         {props.loading ? (
           <Alert>Loading, Please Wait...</Alert>
+        ) : props.error ? (
+          <Alert type="error">{props.error}</Alert>
         ) : (
-          props.error ? (
-            <Alert type="error">{props.error}</Alert>
-          ) : (
-            <Alert type={props.data.length > 0 ? 'success' : 'error'}>
-              Found {props.data.length} users.
-            </Alert>
-          )
+          <Alert type={props.data.length > 0 ? 'success' : 'error'}>Found {props.data.length} users.</Alert>
         )}
       </div>
       <div
@@ -52,7 +41,10 @@ const Users = (props) => (
           top: 0
         }}
       >
-        <Alert>The form functionality is implemented using <a href="https://github.com/promotively/react-redux-form">@promotively/react-redux-form</a>.</Alert>
+        <Alert>
+          The form functionality is implemented using{' '}
+          <a href="https://github.com/promotively/react-redux-form">@promotively/react-redux-form</a>.
+        </Alert>
       </div>
     </div>
     {props.data && props.data.length ? (
@@ -68,7 +60,7 @@ const Users = (props) => (
             </TableRow>
           </TableHeader>
           <TableBody>
-            {props.data.map((user) => (
+            {props.data.map(user => (
               <TableRow key={user.id}>
                 <TableBodyRowCell>{user.id}</TableBodyRowCell>
                 <TableBodyRowCell>{user.name}</TableBodyRowCell>

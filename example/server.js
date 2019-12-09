@@ -30,8 +30,12 @@ const app = (
 const server = express();
 const directory = process.cwd();
 const bundle = fs.readFileSync(`${directory}/browser.js`).toString();
-const html = fs.readFileSync(`${directory}/index.html`).toString().replace('./browser.js', 'http://localhost:3000/browser.js').split('<main />');
-const [ header, footer ] = html;
+const html = fs
+  .readFileSync(`${directory}/index.html`)
+  .toString()
+  .replace('./browser.js', 'http://localhost:3000/browser.js')
+  .split('<main />');
+const [header, footer] = html;
 
 server.get('/', (req, res) => {
   hydrateStore(app, store, data)
@@ -40,7 +44,8 @@ server.get('/', (req, res) => {
       const state = `<script>window.REDUX_INITIAL_STATE = ${JSON.stringify(store.getState())};</script>`;
 
       return res.send(`${header}<main>${jsx}</main>${state}${footer}`);
-    }).catch((error) => {
+    })
+    .catch(error => {
       res.error('Internal Server Error');
       throw error;
     });
@@ -55,18 +60,12 @@ server.get('/api/v1/users', (req, res) => {
   const { search } = req.query;
 
   res.json({
-    users: search ? users.filter(
-      (user) => user.name.toLowerCase().includes(search.toLowerCase())
-    ) : users.sort(
-      (previous, next) => (
-        previous.id - next.id
-      )
-    )
+    users: search
+      ? users.filter(user => user.name.toLowerCase().includes(search.toLowerCase()))
+      : users.sort((previous, next) => previous.id - next.id)
   });
 });
 
-server.get('/browser.js', (req, res) => (
-  res.send(bundle)
-));
+server.get('/browser.js', (req, res) => res.send(bundle));
 
 server.listen(3000);

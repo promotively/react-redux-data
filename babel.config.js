@@ -3,14 +3,16 @@ module.exports = {
     '@babel/plugin-proposal-class-properties',
     'add-module-exports',
     [
-      'module-resolver', {
-        root: [ './src/**' ]
+      'module-resolver',
+      {
+        root: ['./src/**']
       }
     ]
   ],
   presets: [
     [
-      '@babel/preset-env', {
+      '@babel/preset-env',
+      {
         targets: {
           node: 10
         }

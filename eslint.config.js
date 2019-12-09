@@ -1,6 +1,3 @@
 module.exports = {
-  extends: [
-    '@promotively/eslint-config',
-    '@promotively/eslint-config-react'
-  ]
+  extends: ['@promotively/eslint-config', '@promotively/eslint-config-react']
 };

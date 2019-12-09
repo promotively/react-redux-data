@@ -11,7 +11,7 @@
 
 import React from 'react';
 
-const Form = (props) => (
+const Form = props => (
   <form
     style={{
       display: 'inline-block',

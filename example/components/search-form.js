@@ -1,4 +1,3 @@
-
 /*
  * @promotively/react-redux-data
  *
@@ -15,7 +14,7 @@ import FormContainer from '../containers/form';
 import FormInputContainer from '../containers/form-input';
 import React from 'react';
 
-const SearchForm = (props) => {
+const SearchForm = props => {
   const { id, onSubmit } = props;
 
   return (
@@ -27,4 +26,3 @@ const SearchForm = (props) => {
 };
 
 export default SearchForm;
-

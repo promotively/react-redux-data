@@ -11,7 +11,7 @@
 
 import React from 'react';
 
-const Alert = (props) => (
+const Alert = props => (
   <div
     style={{
       background: '#fff',
@@ -19,22 +19,30 @@ const Alert = (props) => (
       display: 'inline-block',
       fontSize: '14px',
       padding: '5px',
-      ...props.type === 'info' ? {
-        background: '#e6f7ff',
-        border: '1px solid #91d5ff'
-      } : {},
-      ...props.type === 'success' ? {
-        background: '#f6ffed',
-        border: '1px solid #b7eb8f'
-      } : {},
-      ...props.type === 'warn' ? {
-        background: '#fffbe6',
-        border: '1px solid #ffe58f'
-      } : {},
-      ...props.type === 'error' ? {
-        background: '#fff1f0',
-        border: '1px solid #ffa39e'
-      } : {}
+      ...(props.type === 'info'
+        ? {
+            background: '#e6f7ff',
+            border: '1px solid #91d5ff'
+          }
+        : {}),
+      ...(props.type === 'success'
+        ? {
+            background: '#f6ffed',
+            border: '1px solid #b7eb8f'
+          }
+        : {}),
+      ...(props.type === 'warn'
+        ? {
+            background: '#fffbe6',
+            border: '1px solid #ffe58f'
+          }
+        : {}),
+      ...(props.type === 'error'
+        ? {
+            background: '#fff1f0',
+            border: '1px solid #ffa39e'
+          }
+        : {})
     }}
   >
     {props.children}

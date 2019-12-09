@@ -7,12 +7,7 @@
  * @license MIT
  */
 
-import {
-  DATA_COMPLETE,
-  DATA_ERROR,
-  DATA_LOADING,
-  DATA_REMOVE
-} from 'actions/data';
+import { DATA_COMPLETE, DATA_ERROR, DATA_LOADING, DATA_REMOVE } from 'actions/data';
 import dataReducer from 'reducers/data';
 
 const dataId = 'test';
@@ -43,10 +38,12 @@ describe('reducers/data.js', () => {
       }
     };
 
-    expect(dataReducer(previousState, {
-      id: dataId,
-      type: DATA_LOADING
-    })).toEqual(nextState);
+    expect(
+      dataReducer(previousState, {
+        id: dataId,
+        type: DATA_LOADING
+      })
+    ).toEqual(nextState);
   });
 
   it('should handle DATA_ERROR action type.', () => {
@@ -59,11 +56,13 @@ describe('reducers/data.js', () => {
       }
     };
 
-    expect(dataReducer(previousState, {
-      error: mockError.message,
-      id: dataId,
-      type: DATA_ERROR
-    })).toEqual(nextState);
+    expect(
+      dataReducer(previousState, {
+        error: mockError.message,
+        id: dataId,
+        type: DATA_ERROR
+      })
+    ).toEqual(nextState);
   });
 
   it('should handle DATA_COMPLETE action type.', () => {
@@ -76,11 +75,13 @@ describe('reducers/data.js', () => {
       }
     };
 
-    expect(dataReducer(previousState, {
-      data: mockData,
-      id: dataId,
-      type: DATA_COMPLETE
-    })).toEqual(nextState);
+    expect(
+      dataReducer(previousState, {
+        data: mockData,
+        id: dataId,
+        type: DATA_COMPLETE
+      })
+    ).toEqual(nextState);
   });
 
   it('should handle DATA_REMOVE action type.', () => {
@@ -93,9 +94,11 @@ describe('reducers/data.js', () => {
       }
     };
 
-    expect(dataReducer(currentState, {
-      id: dataId,
-      type: DATA_REMOVE
-    })).toEqual(previousState);
+    expect(
+      dataReducer(currentState, {
+        id: dataId,
+        type: DATA_REMOVE
+      })
+    ).toEqual(previousState);
   });
 });

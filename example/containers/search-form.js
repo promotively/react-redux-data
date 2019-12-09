@@ -12,17 +12,15 @@
 import React from 'react';
 import SearchForm from '../components/search-form';
 
-const handleSubmit = (props) => () => new Promise((resolve, reject) => {
-  const { action, keywords, promise } = props;
+const handleSubmit = props => () =>
+  new Promise((resolve, reject) => {
+    const { action, keywords, promise } = props;
 
-  return action('users', () => promise({ keywords })).then(resolve).catch(reject);
-});
+    return action('users', () => promise({ keywords }))
+      .then(resolve)
+      .catch(reject);
+  });
 
-const SearchFormContainer = (props) => (
-  <SearchForm
-    id={props.id}
-    onSubmit={handleSubmit(props)}
-  />
-);
+const SearchFormContainer = props => <SearchForm id={props.id} onSubmit={handleSubmit(props)} />;
 
 export default SearchFormContainer;

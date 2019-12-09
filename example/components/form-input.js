@@ -11,7 +11,7 @@
 
 import React from 'react';
 
-const FormInput = (props) => (
+const FormInput = props => (
   <input
     style={{
       border: '1px solid #000',

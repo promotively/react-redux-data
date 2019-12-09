@@ -21,7 +21,7 @@ import {
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-const createMockStore = configureMockStore([ thunk ]);
+const createMockStore = configureMockStore([thunk]);
 
 const dataId = 'test';
 const mockData = { test: true };
@@ -72,10 +72,7 @@ describe('actions/data.js', () => {
   });
 
   it('should handle setting the error state.', () => {
-    expect(errorData(
-      dataId,
-      mockError
-    )).toEqual({
+    expect(errorData(dataId, mockError)).toEqual({
       error: mockError.message,
       id: dataId,
       type: DATA_ERROR
@@ -83,19 +80,14 @@ describe('actions/data.js', () => {
   });
 
   it('should handle setting the loading state.', () => {
-    expect(loadingData(
-      dataId
-    )).toEqual({
+    expect(loadingData(dataId)).toEqual({
       id: dataId,
       type: DATA_LOADING
     });
   });
 
   it('should handle setting the data state.', () => {
-    expect(completeData(
-      dataId,
-      mockData
-    )).toEqual({
+    expect(completeData(dataId, mockData)).toEqual({
       data: mockData,
       id: dataId,
       type: DATA_COMPLETE
