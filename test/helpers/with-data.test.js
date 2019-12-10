@@ -7,8 +7,8 @@
  * @license MIT
  */
 
+import { DATA_LOADING, DATA_REMOVE } from 'actions/data';
 import configureMockStore from 'redux-mock-store';
-import { DATA_LOADING } from 'actions/data';
 import DataProvider from 'containers/data-provider';
 import { Provider } from 'react-redux';
 import React from 'react';
@@ -17,17 +17,17 @@ import thunk from 'redux-thunk';
 import withData from 'helpers/with-data';
 
 const dataId = 'test-data';
-const mockData = { test: true };
+const mockData = {
+  test: true
+};
 const MockComponent = props => props.children || 'test';
 const createMockStore = configureMockStore([thunk]);
 const createMockPromise = () => Promise.resolve(mockData);
 
 describe('helpers/with-data.js', () => {
   it('should fetch data when the store is empty.', () => {
-    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
-    const mockStore = createMockStore({
-      data: {}
-    });
+    const DataContainer = withData({ action: createMockPromise, id: dataId })(MockComponent);
+    const mockStore = createMockStore({ data: {} });
 
     ReactTestRenderer.create(
       <Provider store={mockStore}>
@@ -37,14 +37,11 @@ describe('helpers/with-data.js', () => {
 
     const actions = mockStore.getActions();
 
-    expect(actions[0]).toEqual({
-      id: dataId,
-      type: DATA_LOADING
-    });
+    expect(actions[0]).toEqual({ id: dataId, type: DATA_LOADING });
   });
 
   it('should not fetch data when the store is not empty.', () => {
-    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
+    const DataContainer = withData({ action: createMockPromise, id: dataId })(MockComponent);
     const mockStore = createMockStore({
       data: {
         [dataId]: {
@@ -76,9 +73,11 @@ describe('helpers/with-data.js', () => {
         }
       }
     };
-    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
+    const DataContainer = withData({ action: createMockPromise, id: dataId })(MockComponent);
     const mockStore = createMockStore(mockState);
-    const props = { test: true };
+    const props = {
+      test: true
+    };
     const renderer = ReactTestRenderer.create(
       <Provider store={mockStore}>
         <DataContainer test />
@@ -90,10 +89,8 @@ describe('helpers/with-data.js', () => {
   });
 
   it('should add the data promise into the data context if <DataProvider /> is an ancestor in the tree.', () => {
-    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
-    const mockStore = createMockStore({
-      data: {}
-    });
+    const DataContainer = withData({ action: createMockPromise, id: dataId })(MockComponent);
+    const mockStore = createMockStore({ data: {} });
     const dataContext = [];
 
     ReactTestRenderer.create(
@@ -105,5 +102,59 @@ describe('helpers/with-data.js', () => {
     );
 
     expect(dataContext[0].id).toEqual(dataId);
+  });
+
+  it(`should remove fetched data when the container component unmounts if
+  params.destroy is set to true(this is the default behaviour).`, () => {
+    const DataContainer = withData({ action: createMockPromise, id: dataId })(MockComponent);
+    const mockStore = createMockStore({
+      data: {
+        [dataId]: {
+          data: [mockData],
+          error: null,
+          loading: false
+        }
+      }
+    });
+
+    const renderer = ReactTestRenderer.create(
+      <Provider store={mockStore}>
+        <DataContainer />
+      </Provider>
+    );
+
+    renderer.unmount();
+
+    const actions = mockStore.getActions();
+
+    expect(actions[0]).toEqual({
+      id: dataId,
+      type: DATA_REMOVE
+    });
+  });
+
+  it('should not remove fetched data when the container component unmounts if params.destroy is set to false.', () => {
+    const DataContainer = withData({ action: createMockPromise, destroy: false, id: dataId })(MockComponent);
+    const mockStore = createMockStore({
+      data: {
+        [dataId]: {
+          data: [mockData],
+          error: null,
+          loading: false
+        }
+      }
+    });
+
+    const renderer = ReactTestRenderer.create(
+      <Provider store={mockStore}>
+        <DataContainer />
+      </Provider>
+    );
+
+    renderer.unmount();
+
+    const actions = mockStore.getActions();
+
+    expect(actions.length).toEqual(0);
   });
 });

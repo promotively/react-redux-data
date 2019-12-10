@@ -15,7 +15,7 @@
 
 /* eslint-disable react/prop-types */
 
-import { completeData, errorData, fetchData, loadingData } from 'actions/data';
+import { completeData, errorData, fetchData, loadingData, removeData } from 'actions/data';
 import createDataErrorSelector from 'selectors/data-error';
 import createDataLoadingSelector from 'selectors/data-loading';
 import createDataSelector from 'selectors/data';
@@ -32,32 +32,35 @@ const mapDispatchToProps = {
   completeData,
   errorData,
   fetchData,
-  loadingData
+  loadingData,
+  removeData
 };
 
 /**
  * Creates a new component wrapped by the withData higher order component.
  * @function
- * @param {String} id The ID for the data.
- * @param {Promise} promise A function that returns a promise containing the data.
+ * @param {Object} options An object containing configuration options.
  * @returns {Function} A function that that wraps your components using the withData higher order component.
  * @example
  * ...
  *
  * import { withData } from '@promotively/react-redux-data';
  *
- * const Users = (props) => (
+ * const Users = props => (
  *   <ul>
  *     {props.users.map((user) => (
  *       <li key={user.id}>{user.name}</li>
  *     ))}
  *   </ul>
  * );
- * const UsersContainer = withData('users', axios.get('http://localhost:3000/api/v1/users'))(Users);
  *
- * ...
+ * export default withData({
+ *   id: 'users',
+ *   action: props => axios.get('http://localhost:3000/api/v1/users').then(data => data)
+ * })(Users);
+ *
  */
-const withData = (id, promise) => Component => {
+const withData = options => Component => {
   /**
    * Maps the state from the redux.js store back to props that are passed down to the react.js component.
    * @function
@@ -66,6 +69,7 @@ const withData = (id, promise) => Component => {
    * @returns {Object} Mapped properties from the redux.js store.
    */
   const mapStateToProps = (state, props) => {
+    const { id } = options;
     const dataSelector = createDataSelector(id);
     const dataErrorSelector = createDataErrorSelector(id);
     const dataLoadingSelector = createDataLoadingSelector(id);
@@ -82,14 +86,35 @@ const withData = (id, promise) => Component => {
     /**
      * @typedef WrappedComponentProps
      * @type {Object}
-     * @property {Object} data The current data in the store.
-     * @property {String} error The current data error state.
+     * @property {Object} data The current data state.
+     * @property {String} error The current error state.
      * @property {String} id The ID for the data.
-     * @property {Promise} promise A function that returns a promise containing the data.
-     * @property {errorData} errorData Redux action to set an error for the data in the store.
-     * @property {fetchData} fetchData Redux action to re-fetch the data and save it in the store.
-     * @property {String} loading The current data loading state.
+     * @property {Function} action A function that returns a promise that fetches the data.
+     * @property {errorData} errorData Redux action to set the error state.
+     * @property {fetchData} fetchData Redux action to set the data state (refresh the data).
+     * @property {loadingData} loadingData Redux action to set the loading state.
+     * @property {removeData} removeData Redux action to remove the data from the store.
+     * @property {String} loading The current loading state.
      */
+
+    /**
+     * The default configuration options for this component.
+     * @constant
+     * @type {Object}
+     */
+    defaults = {
+      destroy: true
+    };
+
+    /**
+     * The default configuration options merged with the specified options.
+     * @constant
+     * @type {Object}
+     */
+    options = {
+      ...this.defaults,
+      ...options
+    };
 
     /**
      * Returns only the component properties that need to be passed to the child component.
@@ -100,8 +125,7 @@ const withData = (id, promise) => Component => {
     getComponentProps() {
       return {
         ...this.props,
-        id,
-        promise
+        ...options
       };
     }
 
@@ -117,7 +141,7 @@ const withData = (id, promise) => Component => {
 
       // Only fetch data if it is not already available in the redux.js store.
       if (!data || (data && Object.keys(data).length === 0)) {
-        fetchData(id, () => promise(props));
+        fetchData(options.id, () => options.action(props));
       }
     }
 
@@ -130,9 +154,28 @@ const withData = (id, promise) => Component => {
     constructor(props, context) {
       super(props, context);
 
-      // Only push to the data context if it exists, is an array and is not already added to the data context.
-      if (Array.isArray(context) && !context.includes({ id, promise })) {
-        context.push({ id, promise, props });
+      // Only push to the data context if it exists, is an array and is not already
+      // added to the data context.
+      if (Array.isArray(context) && !context.includes(options)) {
+        context.push({
+          ...options,
+          props
+        });
+      }
+    }
+
+    /**
+     * Removes the data from the store when the component unmounts.
+     * @function
+     * @memberof WrappedComponent
+     * @returns {Undefined} Function does not return a value.
+     */
+    componentWillUnmount() {
+      const { id, destroy } = this.options;
+      const { removeData } = this.props;
+
+      if (destroy) {
+        removeData(id);
       }
     }
 

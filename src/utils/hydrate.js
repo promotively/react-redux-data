@@ -70,7 +70,7 @@ const hydrateStore = (app, store, data) => {
    */
   renderToStaticMarkup(app);
 
-  const promises = data.map(data => fetchData(data.id, () => data.promise(data.props))(store.dispatch));
+  const promises = data.map(item => fetchData(item.id, () => item.action(item.props))(store.dispatch));
 
   return Promise.all(promises)
     .then(result => {

@@ -17,7 +17,9 @@ import thunk from 'redux-thunk';
 import withData from 'helpers/with-data';
 
 const dataId = 'test-data';
-const mockData = { test: true };
+const mockData = {
+  test: true
+};
 const MockComponent = props => props.children || 'test';
 const createMockStore = configureMockStore([thunk]);
 const mockError = new Error('test-error');
@@ -26,10 +28,8 @@ const createMockPromiseWithError = () => Promise.reject(mockError);
 
 describe('utils/hydrate.js', () => {
   it('should handle saving data to the store when a promise is resolved.', async () => {
-    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
-    const mockStore = createMockStore({
-      data: {}
-    });
+    const DataContainer = withData({ action: createMockPromise, id: dataId })(MockComponent);
+    const mockStore = createMockStore({ data: {} });
     const data = [];
     const app = (
       <Provider store={mockStore}>
@@ -42,18 +42,12 @@ describe('utils/hydrate.js', () => {
     await hydrateStore(app, mockStore, data);
     const actions = mockStore.getActions();
 
-    expect(actions[1]).toEqual({
-      data: mockData,
-      id: dataId,
-      type: DATA_COMPLETE
-    });
+    expect(actions[1]).toEqual({ data: mockData, id: dataId, type: DATA_COMPLETE });
   });
 
   it('should return the correct response when all promises are resolved.', async () => {
-    const DataContainer = withData(dataId, createMockPromise)(MockComponent);
-    const mockStore = createMockStore({
-      data: {}
-    });
+    const DataContainer = withData({ action: createMockPromise, id: dataId })(MockComponent);
+    const mockStore = createMockStore({ data: {} });
     const data = [];
     const app = (
       <Provider store={mockStore}>
@@ -68,10 +62,8 @@ describe('utils/hydrate.js', () => {
   });
 
   it('should handle errors when fetching data if a promise is rejected.', async () => {
-    const DataContainer = withData(dataId, createMockPromiseWithError)(MockComponent);
-    const mockStore = createMockStore({
-      data: {}
-    });
+    const DataContainer = withData({ action: createMockPromiseWithError, id: dataId })(MockComponent);
+    const mockStore = createMockStore({ data: {} });
     const data = [];
     const app = (
       <Provider store={mockStore}>

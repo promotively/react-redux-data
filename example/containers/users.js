@@ -59,6 +59,6 @@ const fetchUsers = props => {
   );
 };
 
-const UsersContainer = compose(withRedux(mapStateToProps), withData('users', fetchUsers))(Users);
+const UsersContainer = compose(withRedux(mapStateToProps), withData({ action: fetchUsers, id: 'users' }))(Users);
 
 export default UsersContainer;

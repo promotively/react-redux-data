@@ -21,7 +21,7 @@ const Users = props => (
       <SearchFormContainer
         id="search"
         action={props.fetchData}
-        promise={props.promise}
+        promise={props.action}
         dispatch={props.dispatch}
         keywords={props.keywords}
       />

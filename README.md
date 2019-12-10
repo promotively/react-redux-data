@@ -11,18 +11,18 @@ Universal/isomorphic react.js/redux.js library for data fetching.
 
 ## Why?
 
-* You are already using redux.js in your app.
-* You want an easy way to handle data fetching.
-* You are building a new app and want to use redux.js to handle your data state.
-* You have a bunch of repetitive data related react.js/redux.js boilerplate you wish didn't exist.
-* You want a proper data abstraction layer but don't have the time to build one.
-* You want to be able to debug your data through redux dev tools.
-* You want to avoid an architecture that depends on some kind of global data fetching layer (ie: react-router-config). 
-* You need a library that is compatible with server side rendering.
-* You need to interact with APIs that are not HTTP and/or JSON based.
-* You want to refresh your data periodically through timers or events.
-* You need access to your component props when fetching data for things like access tokens or configs.
-* You need to share your data with external applications and/or tools.
+- You are already using redux.js in your app.
+- You want an easy way to handle data fetching.
+- You are building a new app and want to use redux.js to handle your data state.
+- You have a bunch of repetitive data related react.js/redux.js boilerplate you wish didn't exist.
+- You want a proper data abstraction layer but don't have the time to build one.
+- You want to be able to debug your data through redux dev tools.
+- You want to avoid an architecture that depends on some kind of global data fetching layer (ie: react-router-config).
+- You need a library that is compatible with server side rendering.
+- You need to interact with APIs that are not HTTP and/or JSON based.
+- You want to refresh your data periodically through timers or events.
+- You need access to your component props when fetching data for things like access tokens or configs.
+- You need to share your data with external applications and/or tools.
 
 ## Installation
 
@@ -38,9 +38,9 @@ With NPM
 
 ## Example
 
-A working example is available inside the ```/example``` folder.
+A working example is available inside the `/example` folder.
 
-Once you have executed ```yarn build``` go to the ```dist/example``` folder and from there you can run ```node server.js``` to see server side rendering from ```localhost:3000``` or open the ```index.html``` file to see client side rendering.
+Once you have executed `yarn build` go to the `dist/example` folder and from there you can run `node server.js` to see server side rendering from `localhost:3000` or open the `index.html` file to see client side rendering.
 
 An example is also [available online](https://promotively-react-redux-data.s3-us-west-1.amazonaws.com/example/index.html).
 
@@ -48,13 +48,13 @@ An example is also [available online](https://promotively-react-redux-data.s3-us
 
 The source code is documented using JSDoc syntax and documentation is generated using [esdoc](https://github.com/esdoc/esdoc).
 
-Once you have executed ```yarn docs``` documentation is available inside the ```dist/docs``` folder.
+Once you have executed `yarn docs` documentation is available inside the `dist/docs` folder.
 
 Documentation for the most recent release is also [available online](https://promotively-react-redux-data.s3-us-west-1.amazonaws.com/docs/index.html).
 
 ## Setup
 
-Add ```dataReducer``` to your redux.js store and make sure that ```redux-thunk``` is also added to your store middleware.
+Add `dataReducer` to your redux.js store and make sure that `redux-thunk` is also added to your store middleware.
 
 ```javascript
 // store.js
@@ -63,17 +63,14 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { dataReducer } from '@promotively/react-redux-data';
 import thunk from 'redux-thunk';
 
-const store = createStore(
-  combineReducers({ data: dataReducer }),
-  applyMiddleware(...[ thunk ])
-);
+const store = createStore(combineReducers({ data: dataReducer }), applyMiddleware(...[thunk]));
 
 export default store;
 ```
 
 ## Usage
 
-Wrap your component using ```withData``` and specify an id for your data and a function that returns a promise.
+Wrap your component using `withData` and specify an id for your data and a function that returns a promise.
 
 ```javascript
 // containers/users.js
@@ -82,13 +79,13 @@ import { withData } from '@promotively/react-redux-data';
 import axios from 'axios';
 import Users from '../components/users';
 
-const fetchUsers = (props = {}) => (
-  axios.get('http://localhost:3000/api/v1/users').then((response) => (
-    response.data
-  ))
-);
+const fetchUsers = props => axios.get('http://localhost:3000/api/v1/users').then(response => response.data);
 
-const UsersContainer = withData('users', fetchUsers)(Users);
+const UsersContainer = withData({
+  id: 'users',
+  action: fetchUsers,
+  destroy: true // (default=true, optional) Set to false if you want to keep the data in your store when this component unmounts.
+})(Users);
 
 export default UsersContainer;
 ```
@@ -98,13 +95,11 @@ export default UsersContainer;
 
 import React from 'react';
 
-const Users = (props) => (
+const Users = props => (
   <ul>
     {props.error ? <span>Error: {props.error}</span> : null}
     {props.loading ? <span>Loading, Please Wait...</span> : null}
-    {props.users ? props.users.map((user) => (
-      <li key={user.id}>{user.name}</li>
-    )) : null}
+    {props.users ? props.users.map(user => <li key={user.id}>{user.name}</li>) : null}
   </ul>
 );
 
@@ -116,14 +111,12 @@ export default Users;
 
 import React from 'react';
 
-const App = (props) => (
-  <UsersContainer />
-);
+const App = props => <UsersContainer />;
 
 export default App;
 ```
 
-If you need to do server side rendering use ```hydrateStore``` with ```<DataProvider />``` to pre-fetch data before your app is rendered.
+If you need to do server side rendering use `hydrateStore` with `<DataProvider />` to pre-fetch data before your app is rendered.
 
 ```javascript
 // server.js
@@ -163,49 +156,49 @@ server.listen(3000);
 
 ### Redux Action Creators
 
-| Function | Arguments | Description |
-| --- | --- | --- |
-| `completeData` | (id, data) | Insert data into the store directly (good for caching!). |
-| `loadingData` | (id) | Set the data loading state. |
-| `errorData` | (id, error) | Set the data error state. |
-| `removeData` | (id) | Remove data from the store. |
-| `fetchData` | (id, promise) | Resolve a promise and add the result to the store. |
+| Function       | Arguments     | Description                                              |
+| -------------- | ------------- | -------------------------------------------------------- |
+| `completeData` | (id, data)    | Insert data into the store directly (good for caching!). |
+| `loadingData`  | (id)          | Set the data loading state.                              |
+| `errorData`    | (id, error)   | Set the data error state.                                |
+| `removeData`   | (id)          | Remove data from the store.                              |
+| `fetchData`    | (id, promise) | Resolve a promise and add the result to the store.       |
 
 ### React Container Component
 
-| Function | Description | Props
-| --- | --- | --- |
-| `DataProvider` | Container component primarily used with the hydrateStore function for pre-fetching data with server side rendering. | { completeData, data, error, errorData, fetchData, loading, loadingData, removeData }
+| Function       | Description                                                                                                         | Props                                                                                 |
+| -------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `DataProvider` | Container component primarily used with the hydrateStore function for pre-fetching data with server side rendering. | { completeData, data, error, errorData, fetchData, loading, loadingData, removeData } |
 
 ### React Higher Order Component
 
-| Function | Arguments | Description | Props
-| --- | --- | --- | --- |
-| `withData` | (Component) | Higher order component that handles fetching and clearing data. | { completeData, data, error, errorData, fetchData, loading, loadingData, removeData }
+| Function   | Arguments | Description                                 | Props                                                                                                      |
+| ---------- | --------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `withData` | (params)  | An object containing configuration options. | { id, action, completeData, data, destroy, error, errorData, fetchData, loading, loadingData, removeData } |
 
 ### Redux Reducers
 
-| Function | Description |
-| --- | --- 
+| Function      | Description                                                                                   |
+| ------------- | --------------------------------------------------------------------------------------------- |
 | `dataReducer` | A redux.js reducer function to handle the state mutations during the data fetching lifecycle. |
 
 ### React Redux Selectors
 
-| Function | Arguments | Description |
-| --- | --- | --- |
-| `createDataSelector` | (id) | Create a reselect.js selector function to get the current data. |
-| `createDataErrorSelector` | (id) | Create a reselect.js selector function to get the error state. |
-| `createDataLoadingSelector` | (id) | Create a reselect.js selector function to get the loading state. |
+| Function                    | Arguments | Description                                                      |
+| --------------------------- | --------- | ---------------------------------------------------------------- |
+| `createDataSelector`        | (id)      | Create a reselect.js selector function to get the current data.  |
+| `createDataErrorSelector`   | (id)      | Create a reselect.js selector function to get the error state.   |
+| `createDataLoadingSelector` | (id)      | Create a reselect.js selector function to get the loading state. |
 
 ### Utilities
 
-| Function | Arguments | Description |
-| --- | --- | --- |
+| Function       | Arguments          | Description                                                                                                   |
+| -------------- | ------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `hydrateStore` | (app, store, data) | A function that is used with the <DataProvider /> component for pre-fetching data with server side rendering. |
 
 ## Build
 
-All build artifacts can be found inside the ```dist/lib``` and ```dist/example``` folders after running ```yarn build```.
+All build artifacts can be found inside the `dist/lib` and `dist/example` folders after running `yarn build`.
 
 ## Linting
 
@@ -219,7 +212,7 @@ yarn lint
 
 This library has 100% unit test code coverage.
 
-Code coverage is available inside the ```dist/coverage``` folder after running ```yarn test```.
+Code coverage is available inside the `dist/coverage` folder after running `yarn test`.
 
 Code coverage for the most recent release is also [available online](https://promotively-react-redux-data.s3-us-west-1.amazonaws.com/tests/index.html).
 
