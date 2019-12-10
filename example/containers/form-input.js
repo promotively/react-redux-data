@@ -10,6 +10,6 @@
 import FormInput from '../components/form-input';
 import { withFormInput } from '@promotively/react-redux-form';
 
-const FormInputContainer = withFormInput(FormInput);
+const FormInputContainer = withFormInput()(FormInput);
 
 export default FormInputContainer;

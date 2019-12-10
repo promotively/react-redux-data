@@ -10,6 +10,6 @@
 import Form from '../components/form';
 import { withForm } from '@promotively/react-redux-form';
 
-const FormContainer = withForm(Form);
+const FormContainer = withForm()(Form);
 
 export default FormContainer;

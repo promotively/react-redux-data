@@ -62,7 +62,7 @@
     "@promotively/eslint-config": "^2.0.1",
     "@promotively/eslint-config-react": "^1.2.1",
     "@promotively/prettier-config": "^1.0.0",
-    "@promotively/react-redux-form": "^2.3.1",
+    "@promotively/react-redux-form": "^3.0.0",
     "axios": "^0.19.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.2",
