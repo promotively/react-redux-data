@@ -11,11 +11,13 @@ import { DataProvider, hydrateStore } from '../src';
 import App from './components/app';
 import createReduxStore from './store';
 import express from 'express';
+import expressWinston from 'express-winston';
 import fs from 'fs';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider as StoreProvider } from 'react-redux';
 import users from './data.json';
+import winston from 'winston';
 
 const store = createReduxStore();
 const data = [];
@@ -36,6 +38,16 @@ const html = fs
   .replace('./browser.js', 'http://localhost:3000/browser.js')
   .split('<main />');
 const [header, footer] = html;
+
+server.use(
+  expressWinston.logger({
+    colorize: true,
+    expressFormat: true,
+    format: winston.format.combine(winston.format.prettyPrint(), winston.format.simple()),
+    meta: false,
+    transports: [new winston.transports.Console()]
+  })
+);
 
 server.get('/', (req, res) => {
   hydrateStore(app, store, data)
@@ -68,4 +80,8 @@ server.get('/api/v1/users', (req, res) => {
 
 server.get('/browser.js', (req, res) => res.send(bundle));
 
-server.listen(3000);
+const port = 3000;
+server.listen(port);
+
+console.log(`info: Example file://${process.cwd()}/index.html`);
+console.log(`info: Example (SSR) http://localhost:${port}/`);
