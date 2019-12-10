@@ -83,8 +83,7 @@ const fetchUsers = props => axios.get('http://localhost:3000/api/v1/users').then
 
 const UsersContainer = withData({
   id: 'users',
-  action: fetchUsers,
-  destroy: true // (default=true, optional) Set to false if you want to keep the data in your store when this component unmounts.
+  action: fetchUsers
 })(Users);
 
 export default UsersContainer;
@@ -172,9 +171,9 @@ server.listen(3000);
 
 ### React Higher Order Component
 
-| Function   | Arguments | Description                                 | Props                                                                                                      |
-| ---------- | --------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `withData` | (params)  | An object containing configuration options. | { id, action, completeData, data, destroy, error, errorData, fetchData, loading, loadingData, removeData } |
+| Function   | Arguments | Description                                 | Props                                                    |
+| ---------- | --------- | ------------------------------------------- | -------------------------------------------------------- |
+| `withData` | (options) | An object containing configuration options. | { id, action, data, destroy, error, fetchData, loading } |
 
 ### Redux Reducers
 

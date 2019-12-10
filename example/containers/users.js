@@ -59,6 +59,15 @@ const fetchUsers = props => {
   );
 };
 
-const UsersContainer = compose(withRedux(mapStateToProps), withData({ action: fetchUsers, id: 'users' }))(Users);
+const UsersContainer = compose(
+  withRedux(mapStateToProps),
+  withData({
+    action: fetchUsers,
+    // (default=true, optional) Set to false if you want to keep the data in
+    // your store when this component unmounts.
+    destroy: false,
+    id: 'users'
+  })
+)(Users);
 
 export default UsersContainer;
