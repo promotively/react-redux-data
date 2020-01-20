@@ -47,7 +47,7 @@ const Users = props => (
         </Alert>
       </div>
     </div>
-    {props.data && props.data.length ? (
+    {!props.loading && props.data?.length ? (
       <div style={{ marginTop: '10px' }}>
         <Table>
           <TableHeader>

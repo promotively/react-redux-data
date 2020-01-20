@@ -37,7 +37,6 @@ const dataReducer = (state = initialState, action) => {
 
       newState[id] = {
         ...newState[id],
-        data: null,
         error: null,
         loading: true
       };

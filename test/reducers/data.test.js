@@ -32,7 +32,6 @@ describe('reducers/data.js', () => {
     const nextState = {
       ...previousState,
       test: {
-        data: null,
         error: null,
         loading: true
       }
