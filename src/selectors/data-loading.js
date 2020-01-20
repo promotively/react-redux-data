@@ -33,7 +33,7 @@ import { createSelector } from 'reselect';
  */
 const createDataLoadingSelector = id =>
   createSelector(
-    state => Boolean(state.data[id] && state.data[id].loading),
+    state => Boolean(state.data[id]?.loading),
     loading => loading
   );
 

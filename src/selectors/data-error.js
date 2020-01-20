@@ -33,7 +33,7 @@ import { createSelector } from 'reselect';
  */
 const createDataErrorSelector = id =>
   createSelector(
-    state => (state.data[id] && state.data[id].error) || '',
+    state => state.data[id]?.error || '',
     error => error
   );
 

@@ -46,6 +46,7 @@ module.exports = [
           options: {
             plugins: [
               '@babel/plugin-proposal-class-properties',
+              '@babel/plugin-proposal-optional-chaining',
               [
                 'module-resolver',
                 {
@@ -113,6 +114,7 @@ module.exports = [
           options: {
             plugins: [
               '@babel/plugin-proposal-class-properties',
+              '@babel/plugin-proposal-optional-chaining',
               [
                 'module-resolver',
                 {

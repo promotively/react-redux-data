@@ -33,7 +33,7 @@ import { createSelector } from 'reselect';
  */
 const createDataSelector = id =>
   createSelector(
-    state => (state.data[id] && state.data[id].data) || undefined,
+    state => state.data[id]?.data || undefined,
     data => data
   );
 

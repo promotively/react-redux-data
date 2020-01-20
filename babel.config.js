@@ -1,6 +1,7 @@
 module.exports = {
   plugins: [
     '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-optional-chaining',
     'add-module-exports',
     [
       'module-resolver',

@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 import React from 'react';
 
 // document.domain is never defined when opening files locally on the filesystem.
-const isSSR = document && document.domain;
+const isSSR = document?.domain;
 
 const state = window.REDUX_INITIAL_STATE;
 const store = createReduxStore(state);
