@@ -1,13 +1,18 @@
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
+ *
+ * @see {@link https://promotively.com}
+ * @see {@link https://github.com/promotively/react-redux-data}
  */
 
 /**
+ * @module selectors
+ *
+ * @see {@link https://github.com/reduxjs/redux}
  * @see {@link https://github.com/reduxjs/reselect}
  */
 
@@ -15,8 +20,9 @@ import { createSelector } from 'reselect';
 
 /**
  * Returns a reselect.js selector function to get the current data loading state.
+ *
  * @function
- * @param {String} id The ID for the data.
+ * @param {string} id The ID for the data.
  * @returns {Function} A reselect.js selector function.
  * @example
  * ...
@@ -31,10 +37,8 @@ import { createSelector } from 'reselect';
  *
  * ...
  */
-const createDataLoadingSelector = id =>
+export const createDataLoadingSelector = id =>
   createSelector(
-    state => Boolean(state.data[id]?.loading),
+    state => (typeof state.data[id]?.loading === 'boolean' ? state.data[id]?.loading : true),
     loading => loading
   );
-
-export default createDataLoadingSelector;

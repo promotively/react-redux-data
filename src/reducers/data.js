@@ -1,35 +1,41 @@
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
+ *
+ * @see {@link https://promotively.com}
+ * @see {@link https://github.com/promotively/react-redux-data}
  */
 
 /**
+ * @module reducers
+ *
  * @see {@link https://github.com/reduxjs/redux}
  */
 
-import { DATA_LOADING, DATA_COMPLETE, DATA_ERROR, DATA_REMOVE } from 'actions/data';
 import clone from 'clone';
+import { DATA_LOADING, DATA_COMPLETE, DATA_ERROR, DATA_DESTROY } from 'actions/data';
 
 /**
  * Initial state used for the first time the redux.js reducer function is called.
+ *
  * @constant
- * @type {Object}
+ * @type {object}
  */
 const initialState = {};
 
 /**
  * The redux.js reducer function to handle any state mutations that are required during data fetching.
+ *
  * @function
- * @param {Object} state The current state inside the redux.js store.
- * @param {Object} action The last redux.js action that was dispatched.
- * @returns {Object} Deep clone of the existing state of the store with any mutations related to data fetching.
+ * @param {object} state The current state inside the redux.js store.
+ * @param {object} action The last redux.js action that was dispatched.
+ * @returns {object} Deep clone of the existing state of the store with any mutations related to data fetching.
  */
-const dataReducer = (state = initialState, action) => {
-  const { id } = action;
+export const dataReducer = (state = initialState, action) => {
+  const { data, error, id } = action;
 
   switch (action.type) {
     case DATA_LOADING: {
@@ -48,7 +54,7 @@ const dataReducer = (state = initialState, action) => {
 
       newState[id] = {
         data: null,
-        error: action.error,
+        error,
         loading: false
       };
 
@@ -58,14 +64,14 @@ const dataReducer = (state = initialState, action) => {
       const newState = clone(state);
 
       newState[id] = {
-        data: action.data,
+        data,
         error: null,
         loading: false
       };
 
       return newState;
     }
-    case DATA_REMOVE: {
+    case DATA_DESTROY: {
       const newState = clone(state);
 
       delete newState[id];
@@ -76,5 +82,3 @@ const dataReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-export default dataReducer;

@@ -1,30 +1,33 @@
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
+ *
+ * @see {@link https://promotively.com}
+ * @see {@link https://github.com/promotively/react-redux-data}
  */
 
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import {
   DATA_COMPLETE,
   DATA_ERROR,
   DATA_LOADING,
-  DATA_REMOVE,
+  DATA_DESTROY,
   errorData,
   loadingData,
   completeData,
   fetchData,
-  removeData
+  destroyData
 } from 'actions/data';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
 const createMockStore = configureMockStore([thunk]);
 
 const dataId = 'test';
 const mockData = { test: true };
+const mockQuery = {};
 const mockError = new Error('test-error');
 const createMockPromise = () => Promise.resolve(mockData);
 const createMockPromiseWithError = () => Promise.reject(mockError);
@@ -39,12 +42,14 @@ describe('actions/data.js', () => {
 
     expect(actions[0]).toEqual({
       id: dataId,
+      query: mockQuery,
       type: DATA_LOADING
     });
 
     expect(actions[1]).toEqual({
       data: mockData,
       id: dataId,
+      query: mockQuery,
       type: DATA_COMPLETE
     });
   });
@@ -60,6 +65,7 @@ describe('actions/data.js', () => {
 
       expect(actions[0]).toEqual({
         id: dataId,
+        query: mockQuery,
         type: DATA_LOADING
       });
 
@@ -80,24 +86,26 @@ describe('actions/data.js', () => {
   });
 
   it('should handle setting the loading state.', () => {
-    expect(loadingData(dataId)).toEqual({
+    expect(loadingData(dataId, mockQuery)).toEqual({
       id: dataId,
+      query: mockQuery,
       type: DATA_LOADING
     });
   });
 
   it('should handle setting the data state.', () => {
-    expect(completeData(dataId, mockData)).toEqual({
+    expect(completeData(dataId, mockQuery, mockData)).toEqual({
       data: mockData,
       id: dataId,
+      query: mockQuery,
       type: DATA_COMPLETE
     });
   });
 
   it('should remove fetched data', () => {
-    expect(removeData(dataId)).toEqual({
+    expect(destroyData(dataId)).toEqual({
       id: dataId,
-      type: DATA_REMOVE
+      type: DATA_DESTROY
     });
   });
 });

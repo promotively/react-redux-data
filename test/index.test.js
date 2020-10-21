@@ -1,10 +1,12 @@
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
+ *
+ * @see {@link https://promotively.com}
+ * @see {@link https://github.com/promotively/react-redux-data}
  */
 
 import * as exports from 'index';
@@ -12,19 +14,21 @@ import {
   DATA_COMPLETE,
   DATA_ERROR,
   DATA_LOADING,
-  DATA_REMOVE,
+  DATA_DESTROY,
   errorData,
   completeData,
   fetchData,
   loadingData,
-  removeData
+  destroyData
 } from 'actions/data';
-import createDataErrorSelector from 'selectors/data-error';
-import createDataLoadingSelector from 'selectors/data-loading';
-import createDataSelector from 'selectors/data';
-import dataReducer from 'reducers/data';
-import hydrateStore from 'utils/hydrate';
-import withData from 'helpers/with-data';
+import { createDataErrorSelector } from 'selectors/data-error';
+import { createDataLoadingSelector } from 'selectors/data-loading';
+import { createDataSelector } from 'selectors/data';
+import { Data } from 'containers/data';
+import { dataReducer } from 'reducers/data';
+import { hydrateStore } from 'helpers/hydrate-store';
+import { useData } from 'helpers/use-data';
+import { withData } from 'helpers/with-data';
 
 describe('index.js', () => {
   it('should export fetchData action creator.', () => {
@@ -47,9 +51,9 @@ describe('index.js', () => {
     expect(exports.completeData).not.toBeFalsy();
   });
 
-  it('should export removeData action creator.', () => {
-    expect(exports.removeData).toEqual(removeData);
-    expect(exports.removeData).not.toBeFalsy();
+  it('should export destroyData action creator.', () => {
+    expect(exports.destroyData).toEqual(destroyData);
+    expect(exports.destroyData).not.toBeFalsy();
   });
 
   it('should export DATA_LOADING action type.', () => {
@@ -67,12 +71,22 @@ describe('index.js', () => {
     expect(exports.DATA_COMPLETE).not.toBeFalsy();
   });
 
-  it('should export DATA_REMOVE action type.', () => {
-    expect(exports.DATA_REMOVE).toEqual(DATA_REMOVE);
-    expect(exports.DATA_REMOVE).not.toBeFalsy();
+  it('should export DATA_DESTROY action type.', () => {
+    expect(exports.DATA_DESTROY).toEqual(DATA_DESTROY);
+    expect(exports.DATA_DESTROY).not.toBeFalsy();
   });
 
-  it('should export withData higher order component.', () => {
+  it('should export Data react.js container component.', () => {
+    expect(exports.Data).toEqual(Data);
+    expect(exports.Data).not.toBeFalsy();
+  });
+
+  it('should export useData react.js hook.', () => {
+    expect(exports.useData).toEqual(useData);
+    expect(exports.useData).not.toBeFalsy();
+  });
+
+  it('should export withData higher order react.js component.', () => {
     expect(exports.withData).toEqual(withData);
     expect(exports.withData).not.toBeFalsy();
   });

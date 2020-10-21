@@ -1,13 +1,15 @@
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
+ *
+ * @see {@link https://promotively.com}
+ * @see {@link https://github.com/promotively/react-redux-data}
  */
 
-import createDataSelector from 'selectors/data';
+import { createDataSelector } from 'selectors/data';
 
 const dataId = 'test';
 const mockData = { test: true };

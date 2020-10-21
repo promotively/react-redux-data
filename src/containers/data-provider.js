@@ -1,34 +1,45 @@
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
+ *
+ * @see {@link https://promotively.com}
+ * @see {@link https://github.com/promotively/react-redux-data}
  */
 
 /**
+ * @module containers
+ *
  * @see {@link https://github.com/facebook/react}
  */
 
 /* eslint-disable react/prop-types */
 
-import DataContext from 'helpers/data-context';
 import React from 'react';
+import { DataContext } from 'helpers/data-context';
+
+/**
+ * @typedef DataProviderProps
+ * @type {object}
+ * @property {Array} context The external data array used by the data provider.
+ * @property {object | Array} children Any react.js child components to render.
+ */
 
 /**
  * Enable any child withData higher order components to push their data
  * properties to a central store. (useful for server side rendering)
+ *
  * @function
- * @param {Object} props The props for this component.
- * @returns {Object} React JSX to render the data provider and child components.
+ * @param {object} props The props for this component.
+ * @returns {object} React JSX to render the data provider and child components.
  * @example
  * ...
  *
  * import {
  *   DataProvider,
- *   dataReducer,
- *   hydrateStore
+ *   dataReducer
  * } from '@promotively/react-redux-data';
  *
  * server.get('/', (req, res) => {
@@ -44,6 +55,6 @@ import React from 'react';
  *
  * ...
  */
-const DataProvider = props => <DataContext.Provider value={props.context}>{props.children}</DataContext.Provider>;
-
-export default DataProvider;
+export const DataProvider = props => (
+  <DataContext.Provider value={props.context}>{props.children}</DataContext.Provider>
+);

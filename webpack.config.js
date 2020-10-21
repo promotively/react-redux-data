@@ -1,42 +1,44 @@
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
+ * @see {@link https://promotively.com}
  * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
  */
 
+const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const GenerateJSONPlugin = require('generate-json-webpack-plugin');
-const packageInfo = require('./package.json');
-const path = require('path');
 const webpack = require('webpack');
+const nodeExternals = require('webpack-node-externals');
+const packageInfo = require('./package.json');
 
 delete packageInfo.husky;
 delete packageInfo.scripts;
 delete packageInfo.devDependencies;
 
-const dependencies = ['react', 'redux', 'react-redux'];
-
 const copyright = `
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
+ *
+ * @see {@link https://promotively.com}
+ * @see {@link https://github.com/promotively/react-redux-data}
  */\n\n
 `;
 
 module.exports = [
   {
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     entry: {
       browser: 'src/index.js'
     },
-    externals: dependencies,
+    externals: [nodeExternals()],
     mode: 'production',
     module: {
       rules: [
@@ -72,7 +74,6 @@ module.exports = [
       path: path.resolve('./dist/lib')
     },
     plugins: [
-      new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.BannerPlugin({
         banner: copyright,
         entryOnly: true,
@@ -82,23 +83,18 @@ module.exports = [
         ...packageInfo,
         browser: 'browser.js',
         main: 'server.js'
-      })
+      }),
+      new CopyPlugin({ patterns: [{ from: './src/index.d.ts', to: 'index.d.ts' }] })
     ],
     resolve: {
       modules: [path.resolve('.'), path.resolve('./node_modules'), path.resolve('../node_modules')]
-    },
-    stats: {
-      builtAt: false,
-      hash: false,
-      maxModules: 0,
-      version: false
     },
     target: 'web'
   },
   {
     devtool: 'inline-source-map',
     entry: {
-      browser: 'example/browser.js'
+      browser: 'example/with-hooks/app/browser.js'
     },
     mode: 'development',
     module: {
@@ -138,32 +134,25 @@ module.exports = [
       path: path.resolve('./dist/example')
     },
     plugins: [
-      new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.BannerPlugin({
         banner: copyright,
         entryOnly: true,
         raw: true
       }),
-      new CopyPlugin([{ from: './example/index.html', to: 'index.html' }])
+      new CopyPlugin({ patterns: [{ from: './example/common/index.html', to: 'index.html' }] })
     ],
     resolve: {
       modules: [path.resolve('.'), path.resolve('./node_modules'), path.resolve('../node_modules')]
     },
-    stats: {
-      builtAt: false,
-      hash: false,
-      maxModules: 0,
-      version: false
-    },
     target: 'web'
   },
   {
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     entry: {
-      'example/server': ['source-map-support/register', 'example/server.js'],
+      'example/server': ['source-map-support/register', 'example/with-hooks/app/server.js'],
       'lib/server': 'src/index.js'
     },
-    externals: [...dependencies, 'express'],
+    externals: [nodeExternals()],
     mode: 'development',
     module: {
       rules: [
@@ -189,7 +178,6 @@ module.exports = [
       path: path.resolve('./dist')
     },
     plugins: [
-      new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.BannerPlugin({
         banner: copyright,
         entryOnly: true,
@@ -198,12 +186,6 @@ module.exports = [
     ],
     resolve: {
       modules: [path.resolve('.'), path.resolve('./node_modules'), path.resolve('../node_modules')]
-    },
-    stats: {
-      builtAt: false,
-      hash: false,
-      maxModules: 0,
-      version: false
     },
     target: 'node'
   }

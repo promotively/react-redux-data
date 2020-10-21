@@ -1,28 +1,30 @@
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
+ *
+ * @see {@link https://promotively.com}
+ * @see {@link https://github.com/promotively/react-redux-data}
  */
 
-import createDataErrorSelector from 'selectors/data-error';
+import { createDataErrorSelector } from 'selectors/data-error';
 
 const dataId = 'test';
 const mockError = new Error('test-error');
 
 describe('selectors/data-error.js', () => {
-  it('should return an empty string when the error state is not avilable.', () => {
+  it('should return null when there are no errors.', () => {
     const dataErrorSelector = createDataErrorSelector(dataId);
     const mockState = {
       data: {}
     };
 
-    expect(dataErrorSelector(mockState)).toEqual('');
+    expect(dataErrorSelector(mockState)).toBeNull();
   });
 
-  it('should find and return the error state.', () => {
+  it('should return an error string when there is an error.', () => {
     const dataErrorSelector = createDataErrorSelector(dataId);
     const mockState = {
       data: {

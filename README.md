@@ -1,3 +1,5 @@
+# @promotively/react-redux-data
+
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![NPM Version](https://badge.fury.io/js/%40promotively%2Freact-redux-data.svg)](https://badge.fury.io/js/%40promotively%2Freact-redux-data)
 [![Coverage Status](https://coveralls.io/repos/github/promotively/react-redux-data/badge.svg)](https://coveralls.io/github/promotively/react-redux-data)
@@ -5,9 +7,7 @@
 [![GitHub Issues](https://img.shields.io/github/issues/promotively/react-redux-data.svg)](https://github.com/promotively/react-redux-data/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/promotively/react-redux-data.svg)](https://GitHub.com/promotively/react-redux-data/pull/)
 
-# @promotively/react-redux-data
-
-Universal/isomorphic react.js/redux.js library for data fetching.
+Universal/isomorphic react.js/redux.js javascript/typescript library for data fetching.
 
 ## Why?
 
@@ -38,7 +38,7 @@ With NPM
 
 ## Example
 
-A working example is available inside the `/example` folder.
+Advanced examples using higher order components and hooks rendered with nodejs and web browsers are available inside the `/example` folder.
 
 Once you have executed `yarn build` go to the `dist/example` folder and from there you can run `node server.js` to see server side rendering from `localhost:3000` or open the `index.html` file to see client side rendering.
 
@@ -46,7 +46,7 @@ An example is also [available online](https://promotively-react-redux-data.s3-us
 
 ## Documentation
 
-The source code is documented using JSDoc syntax and documentation is generated using [esdoc](https://github.com/esdoc/esdoc).
+The source code is documented using JSDoc syntax and documentation is generated using [jsdoc](https://github.com/jsdoc/jsdoc).
 
 Once you have executed `yarn docs` documentation is available inside the `dist/docs` folder.
 
@@ -155,25 +155,32 @@ server.listen(3000);
 
 ### Redux Action Creators
 
-| Function       | Arguments     | Description                                              |
-| -------------- | ------------- | -------------------------------------------------------- |
-| `completeData` | (id, data)    | Insert data into the store directly (good for caching!). |
-| `loadingData`  | (id)          | Set the data loading state.                              |
-| `errorData`    | (id, error)   | Set the data error state.                                |
-| `removeData`   | (id)          | Remove data from the store.                              |
-| `fetchData`    | (id, promise) | Resolve a promise and add the result to the store.       |
+| Function       | Arguments         | Description                                              |
+| -------------- | ----------------- | -------------------------------------------------------- |
+| `completeData` | (id, query, data) | Insert data into the store directly (good for caching!). |
+| `loadingData`  | (id)              | Set the data loading state.                              |
+| `errorData`    | (id, error)       | Set the data error state.                                |
+| `destroyData`   | (id)              | Remove data from the store.                              |
+| `fetchData`    | (id, promise)     | Resolve a promise and add the result to the store.       |
 
 ### React Container Component
 
 | Function       | Description                                                                                                         | Props                                                                                 |
 | -------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `DataProvider` | Container component primarily used with the hydrateStore function for pre-fetching data with server side rendering. | { completeData, data, error, errorData, fetchData, loading, loadingData, removeData } |
+| `DataProvider` | Container component primarily used with the hydrateStore function for pre-fetching data with server side rendering. | { completeData, data, error, errorData, fetchData, loading, loadingData, destroyData } |
 
 ### React Higher Order Component
 
 | Function   | Arguments | Description                                 | Props                                                    |
 | ---------- | --------- | ------------------------------------------- | -------------------------------------------------------- |
 | `withData` | (options) | An object containing configuration options. | { id, action, data, destroy, error, fetchData, loading } |
+
+
+### React Hook
+
+| Function   | Arguments | Description                                 | Props                                                    |
+| ---------- | --------- | ------------------------------------------- | -------------------------------------------------------- |
+| `useData` | (id, options) | An object containing configuration options. | { id, action, data, destroy, error, fetchData, loading } |
 
 ### Redux Reducers
 
@@ -203,9 +210,7 @@ All build artifacts can be found inside the `dist/lib` and `dist/example` folder
 
 This library uses [@promotively/eslint-config](https://github.com/promotively/eslint-config) and [@promotively/eslint-config-react](https://github.com/promotively/eslint-config-react) for its ESLint configuration.
 
-```
-yarn lint
-```
+`yarn lint`
 
 ## Tests
 

@@ -1,27 +1,31 @@
-/*
- * @promotively/react-redux-data
+/**
+ * promotively/react-redux-data
  *
- * @copyright (c) 2018-2019, Promotively
+ * @copyright Promotively (c) 2020
  * @author Steven Ewing <steven.ewing@promotively.com>
- * @see {@link https://github.com/promotively/react-redux-data}
  * @license MIT
+ *
+ * @see {@link https://promotively.com}
+ * @see {@link https://github.com/promotively/react-redux-data}
  */
 
 export {
   DATA_COMPLETE,
   DATA_ERROR,
   DATA_LOADING,
-  DATA_REMOVE,
+  DATA_DESTROY,
   errorData,
   completeData,
   fetchData,
   loadingData,
-  removeData
+  destroyData
 } from 'actions/data';
-export { default as DataProvider } from 'containers/data-provider';
-export { default as withData } from 'helpers/with-data';
-export { default as hydrateStore } from 'utils/hydrate';
-export { default as dataReducer } from 'reducers/data';
-export { default as createDataSelector } from 'selectors/data';
-export { default as createDataLoadingSelector } from 'selectors/data-loading';
-export { default as createDataErrorSelector } from 'selectors/data-error';
+export { DataProvider } from 'containers/data-provider';
+export { Data } from 'containers/data';
+export { hydrateStore } from 'helpers/hydrate-store';
+export { useData } from 'helpers/use-data';
+export { withData } from 'helpers/with-data';
+export { dataReducer } from 'reducers/data';
+export { createDataSelector } from 'selectors/data';
+export { createDataLoadingSelector } from 'selectors/data-loading';
+export { createDataErrorSelector } from 'selectors/data-error';
